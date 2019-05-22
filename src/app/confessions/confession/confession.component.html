@@ -1,0 +1,29 @@
+
+<div *ngIf="confession">
+  <h1>{{confession.author}}</h1>
+  <h3>{{confession.title}}</h3>
+  <p>{{confession.date}}</p>
+
+  <p>{{confession.content}}</p>
+
+
+<hr>
+
+      <!--<div class="float-right">{{confession.likes.length}} Likes {{confession.comments.length}} Comments</div>-->
+
+      <a (click)="onEditConfession()" class="btn btn-primary mr-3">Edit Confession</a>
+<!--<div class="float-right">-->
+  <a (click)="onLike()" class="btn mr-1 btn-success">{{like}}</a>
+  <a class="btn btn-success">Comment</a>
+<!--</div>-->
+</div>
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,17 @@
+
+    <div class="img-thumbnail">
+      <h1>{{confession.author}}</h1>
+      <h3>{{confession.title}}</h3>
+      <p>{{confession.date}}</p>
+
+      <p>{{confession.content.substr(0, 200)}} {{confession.content.length > 200 ? '[...]' : ''}}</p>
+      <div>
+        <a class="btn btn-info" [routerLink]="['confessions', confession._id]">Read More</a>
+        <div class="float-right">
+          <!--<span>{{confession.likes.length}} Likes {{confession.comments.length}} Comments</span>-->
+        </div>
+
+      </div>
+    </div>
+
+

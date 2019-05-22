@@ -1,20 +1,13 @@
+import {User} from "./user.model";
 
-const mongoose = require('mongoose');
+export class Comment{
 
-// create a schema
-const commentSchema = new mongoose.Schema({
-  author: {
-    id: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User"
-    },
-    username: String
-  },
-  title: String,
-  content: String
-});
-
-const Comment = mongoose.model('Post', commentSchema);
-module.exports = Comment;
-
-
+author: User;
+title: string;
+content: string;
+  constructor(author: User, title: string, content: string){
+    this.author = author;
+    this.title=title;
+    this.content=content;
+  }
+}
