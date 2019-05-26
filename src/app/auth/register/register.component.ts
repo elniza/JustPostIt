@@ -4,8 +4,9 @@ import {UsersService} from "../../users.service";
 import {FlashMessagesService} from "angular2-flash-messages";
 import {NgFlashMessageService} from "ng-flash-messages";
 import {Router} from "@angular/router";
-import {Subscription} from "rxjs";
+import {Subject, Subscription} from "rxjs";
 import {ToastrService} from "ngx-toastr";
+import {takeUntil} from "rxjs/operators";
 
 @Component({
   selector: 'app-register',
@@ -13,7 +14,8 @@ import {ToastrService} from "ngx-toastr";
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-//subscription: Subscription;
+  private ngUnsubscribe = new Subject();
+  
   constructor(private usersService: UsersService,
               private toastrService: ToastrService,
               private router: Router) { }
@@ -21,11 +23,19 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {
   }
 
+  ngOnDestroy(){
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+  }
+
   onSignUp(form: NgForm){
     const username = form.controls['username'].value;
     const password = form.controls['password'].value;
 
     this.usersService.saveUser(username, password)
+      .pipe(
+        takeUntil(this.ngUnsubscribe)
+      )
       .subscribe(
         (response: Response) => {
           this.router.navigate(['/']);

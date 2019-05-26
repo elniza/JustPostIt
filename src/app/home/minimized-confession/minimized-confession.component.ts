@@ -8,7 +8,6 @@ import {Confession} from "../../models/confession.model";
 })
 export class MinimizedConfessionComponent implements OnInit {
   @Input() confession: JSON;
-  @Input() index: number;
   constructor() { }
 
   ngOnInit() {

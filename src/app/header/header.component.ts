@@ -10,23 +10,23 @@ import {ToastrService} from "ngx-toastr";
 })
 export class HeaderComponent implements OnInit {
 
-  isLoggedIn: string;
+  loggedInUser: string;
 //subscription: Subscription;
 
   constructor(private usersService: UsersService,
               private toastrService: ToastrService) { }
 
   ngOnInit() {
-    /*this.subscription = */this.usersService.isLoggedIn
+    /*this.subscription = */this.usersService.loggedInUser
       .subscribe(
-        (loggedInBool: string) => {
-          this.isLoggedIn = loggedInBool;
+        (user: object) => {
+            this.loggedInUser = (user ? user.username : null);
         }
       );
   }
 
   onLogout(){
-    const user = this.isLoggedIn;
+    const user = this.loggedInUser;
     this.usersService.logout();
     this.toastrService.success("User '" + user + "' logged out successfully!", 'Logged out');
   }

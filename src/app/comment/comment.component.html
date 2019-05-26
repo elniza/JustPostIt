@@ -1,0 +1,9 @@
+<div>
+<h6>{{comment.author.username}}</h6>
+<h5>{{comment.date}}</h5>
+<p>{{comment.content}}</p>
+</div>
+<div *ngIf="isCommentOwner">
+  <a (click)="onEditComment()" class="btn btn-primary mr-1">Edit Comment</a>
+  <a (click)="onDeleteComment()" class="btn btn-primary mr-3">Delete Comment</a>
+</div>

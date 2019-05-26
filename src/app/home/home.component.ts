@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {ConfessionsService} from "../confessions.service";
 import {Confession} from "../models/confession.model";
-import {FlashMessagesService} from "angular2-flash-messages";
 import {UsersService} from "../users.service";
+import {Subject, Subscription} from "rxjs";
+import {takeUntil} from "rxjs/operators";
 
 @Component({
   selector: 'app-home',
@@ -10,26 +11,35 @@ import {UsersService} from "../users.service";
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+  private ngUnsubscribe = new Subject();
   confessions;
   isLoggedIn: boolean;
+
   constructor(private confessionsService: ConfessionsService,
               private  usersService: UsersService) { }
 
   ngOnInit() {
-    this.usersService.isLoggedIn
-      .subscribe((username: string) => {
-        this.isLoggedIn = (username != null);
-      });
     this.confessionsService.getConfessions()
+      .pipe(
+        takeUntil(this.ngUnsubscribe)
+      )
       .subscribe((response: Response) => {
         this.confessions = (response.length == 0) ? null : response;
-    });
-
-
+      });
+    this.usersService.loggedInUser
+      .pipe(
+        takeUntil(this.ngUnsubscribe)
+      )
+      .subscribe(
+        (user: object) => {
+        this.isLoggedIn = (user != null);
+      });
 
   }
-  showFlash(){
-    // this.flashMessage.show("Working!");
+
+  ngOnDestroy(){
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
 }

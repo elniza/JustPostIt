@@ -3,8 +3,11 @@ import {NgForm} from "@angular/forms";
 import {Confession} from "../models/confession.model";
 import {User} from "../models/user.model";
 import {ConfessionsService} from "../confessions.service";
-import {ActivatedRoute, Router, UrlSegment} from "@angular/router";
-import {Subscription} from "rxjs";
+import {ActivatedRoute, ActivatedRouteSnapshot, Router, UrlSegment} from "@angular/router";
+import {Subject, Subscription} from "rxjs";
+import {ToastrService, ToastToken} from "ngx-toastr";
+import {Location} from "@angular/common";
+import {takeUntil} from "rxjs/operators";
 
 @Component({
   selector: 'app-new-confession',
@@ -13,72 +16,59 @@ import {Subscription} from "rxjs";
 })
 
 export class ConfessionEditComponent implements OnInit {
-  private subscription: Subscription;
-  editMode=false;
-  editedItemIndex: number;
-  editedItem: Confession;
+  private ngUnsubscribe = new Subject();
+  title: string;
+  content: string;
   action: string = 'Create';
-  mode: string;
+  id: string;
 
-  constructor(private route: ActivatedRoute,
+  constructor(private location: Location,
+              private route: ActivatedRoute,
               private confessionsService: ConfessionsService,
-              private router: Router) { }
+              private router: Router,
+              private toastrService: ToastrService) { }
 
   ngOnInit() {
-    this.route.url.subscribe(
-      (url: UrlSegment[]) => {
-        this.mode=url[url.length-1]['path'];
-        if(this.mode=='edit'){
-          this.subscribe();
-        }
-      }
-    );
-
-
+    const urlSplitted = this.route.routeConfig.path.split('/');
+    if(urlSplitted && urlSplitted[urlSplitted.length - 1] == 'edit'){
+      this.action = 'Edit';
+      this.id = this.route.snapshot.paramMap.get('id');
+      this.title = history.state.title;
+      this.content = history.state.content;
+    }
   }
 
-  subscribe(){
-   // console.log('init')
-    this.subscription = this.confessionsService.data
-      .subscribe(
-        (index: number) => {
-        //  console.log('edit mode');
-          this.action = 'Edit';
-          this.editedItemIndex = index;
-          this.editMode = true;
-         // console.log(this.editMode);
-          //console.log(this.editedItemIndex);
-          // this.editedItem = this.confessionsService
-          //   .getConfession(index);
-          // this.slForm.setValue({
-          //     name: this.editedItem.name,
-          //     amount: this.editedItem.amount
-          //   }
-          // );
-        }
-      );
-    this.subscription.unsubscribe();
+  ngOnDestroy(){
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
-
-  onEditConfession(confessionForm: NgForm){
+  confessionAction(confessionForm: NgForm){
     const title =  confessionForm.controls['title'].value;
     const content = confessionForm.controls['content'].value;
-
-    // const newConfession = new Confession(
-    //   new User("ExampleUser","1"),
-    // confessionForm.controls['title'].value,
-    // confessionForm.controls['content'].value
-    // );
-    this.confessionsService.createConfession(title, content).subscribe();
-    // if(!this.editMode){
-    //   this.confessionsService.addConfession(newConfession);
-    // }
-    // else{
-    //   this.confessionsService.updateConfession(this.editedItemIndex, newConfession);
-    // }
-    //
-    // this.router.navigate(['']);
+    if(this.action == 'Create'){
+      this.confessionsService.createConfession(title, content)
+        .pipe(
+          takeUntil(this.ngUnsubscribe)
+        )
+        .subscribe(
+          (response: Response) => {
+           this.location.back();
+           this.toastrService.success(response.message, 'Add confession');
+          }
+        );
+    }
+    else if(this.action == 'Edit'){
+      this.confessionsService.editConfession(this.id, title, content)
+        .pipe(
+          takeUntil(this.ngUnsubscribe)
+        )
+        .subscribe(
+          (response: Response) => {
+            this.location.back();
+          this.toastrService.success(response.message, 'Update confession');
+        });
+    }
 }
 
 }

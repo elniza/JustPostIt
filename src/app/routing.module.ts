@@ -1,5 +1,5 @@
 import {NgModule} from "@angular/core";
-import {PreloadAllModules, RouterModule, Routes} from "@angular/router";
+import {RouterModule, Routes} from "@angular/router";
 import {AboutComponent} from "./header/about/about.component";
 import {RegisterComponent} from "./auth/register/register.component";
 import {LoginComponent} from "./auth/login/login.component";
@@ -7,19 +7,28 @@ import {HomeComponent} from "./home/home.component";
 import {ConfessionComponent} from "./confessions/confession/confession.component";
 import {ConfessionEditComponent} from "./confession-edit/confession-edit.component";
 import {RoutesService} from "./routes.service";
+import {CommentEditComponent} from "./comment-edit/comment-edit.component";
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
   {path: 'about', component: AboutComponent},
   {path: 'register', component: RegisterComponent},
   {path: 'login', component: LoginComponent},
-  {path: 'new', component: ConfessionEditComponent, canActivate: [RoutesService]},
+  {path: 'confessions/new', component: ConfessionEditComponent, canActivate: [RoutesService]},
   {path: 'confessions/:id', component: ConfessionComponent},
-  {path: 'confessions/:id/edit', component: ConfessionEditComponent}
+  {path: 'confessions/:id/edit', component: ConfessionEditComponent, canActivate: [RoutesService]},
+  {path: 'confessions/:id/comments/new', component: CommentEditComponent},
+  {path: 'confessions/:id/comments/:comment_id/edit', component: CommentEditComponent}
 ];
 
+
+
+
 @NgModule({
-  imports: [RouterModule.forRoot(appRoutes)],
+  imports: [
+    RouterModule.forRoot(appRoutes),
+    RouterModule.forChild(appRoutes)
+  ],
   exports: [RouterModule]
 })
 export class RoutingModule{

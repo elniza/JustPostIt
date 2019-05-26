@@ -1,20 +1,25 @@
 
 <div *ngIf="confession">
-  <h1>{{confession.author}}</h1>
+  <!--<h1>{{confession.author}}</h1>-->
   <h3>{{confession.title}}</h3>
   <p>{{confession.date}}</p>
-
   <p>{{confession.content}}</p>
-
-
+  <div class="float-left" *ngIf="isConfessionOwner">
+  <a (click)="onEditConfession()" class="btn btn-primary mr-1">Edit Confession</a>
+  <a (click)="onDeleteConfession()" class="btn btn-primary mr-3">Delete Confession</a>
+  </div>
+  <div *ngIf="isLoggedIn">
+  <a (click)="onLike()" class="btn mr-1 btn-success">{{like}}</a>
+  <a (click)="onComment()" class="btn btn-success">Comment</a>
+  </div>
 <hr>
-
+  <app-comment *ngFor="let comment of confession.comments;" [comment]="comment"></app-comment>
+  <!--<p *ngFor="let comment of confession.comments;">Comment is {{comment.content}} from user {{comment.author.username}}</p>-->
       <!--<div class="float-right">{{confession.likes.length}} Likes {{confession.comments.length}} Comments</div>-->
 
-      <a (click)="onEditConfession()" class="btn btn-primary mr-3">Edit Confession</a>
+
 <!--<div class="float-right">-->
-  <a (click)="onLike()" class="btn mr-1 btn-success">{{like}}</a>
-  <a class="btn btn-success">Comment</a>
+
 <!--</div>-->
 </div>
 

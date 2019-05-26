@@ -1,11 +1,11 @@
 <div *ngIf="isLoggedIn">
-<a class="btn btn-primary" routerLink="/new">New Confession</a>
+<a class="btn btn-primary" routerLink="confessions/new">New Confession</a>
 <hr>
 </div>
 <div class="container">
   <div *ngIf="confessions;else no_confessions" class="row">
       <app-minimized-confession class="col-md-6"
-        *ngFor="let currentConfession of confessions; let i = index;" [confession]="currentConfession" [index]="i"></app-minimized-confession>
+        *ngFor="let currentConfession of confessions;" [confession]="currentConfession"></app-minimized-confession>
   </div>
 </div>
   <ng-template #no_confessions>

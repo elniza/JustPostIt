@@ -12,7 +12,7 @@
       </li>
     </ul>
 
-      <ul *ngIf="!isLoggedIn" class="nav navbar-nav navbar-right">
+      <ul *ngIf="!loggedInUser" class="nav navbar-nav navbar-right">
         <li class="nav-item" routerLinkActive="active">
           <a class="nav-link" routerLink="/register">Sign Up</a>
         </li>
@@ -20,9 +20,9 @@
           <a class="nav-link" routerLink="/login">Login</a>
         </li>
       </ul>
-    <ul *ngIf="isLoggedIn"  class="nav navbar-nav navbar-right">
+    <ul *ngIf="loggedInUser"  class="nav navbar-nav navbar-right">
       <li class="nav-item">
-        <a class="nav-link">Logged in as {{isLoggedIn}}</a>
+        <a class="nav-link">Logged in as {{loggedInUser}}</a>
       </li>
         <li class="nav-item">
           <a (click)="onLogout()" class="nav-link">Logout</a>

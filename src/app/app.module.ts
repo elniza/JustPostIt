@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { AboutComponent } from './header/about/about.component';
@@ -17,6 +16,9 @@ import { ConfessionEditComponent } from './confession-edit/confession-edit.compo
 import {HttpClientModule} from "@angular/common/http";
 import {ToastNoAnimationModule} from "ngx-toastr";
 import {RoutesService} from "./routes.service";
+import { CommentEditComponent } from './comment-edit/comment-edit.component';
+import {CommentsService} from "./comments.service";
+import { CommentComponent } from './comment/comment.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,9 @@ import {RoutesService} from "./routes.service";
     HomeComponent,
     MinimizedConfessionComponent,
     ConfessionComponent,
-    ConfessionEditComponent
+    ConfessionEditComponent,
+    CommentEditComponent,
+    CommentComponent
   ],
   imports: [
     BrowserModule,
@@ -38,7 +42,7 @@ import {RoutesService} from "./routes.service";
     HttpClientModule,
     ToastNoAnimationModule.forRoot()
   ],
-  providers: [ConfessionsService, UsersService, RoutesService],
+  providers: [ConfessionsService, UsersService, RoutesService, CommentsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
