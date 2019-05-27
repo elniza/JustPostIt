@@ -5,14 +5,14 @@ import {User} from "./models/user.model";
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {catchError} from "rxjs/operators";
 import {Shared} from "./shared/shared";
-import {BehaviorSubject} from "rxjs";
+import {ReplaySubject} from "rxjs";
 
 @Injectable()
 export class CommentsService{
-  isCommentDeleted: BehaviorSubject<boolean>;
+  isCommentDeleted: ReplaySubject<boolean>;
   constructor(private usersService: UsersService,
               private http: HttpClient){
-    this.isCommentDeleted = new BehaviorSubject<boolean>(false);
+    this.isCommentDeleted = new ReplaySubject<boolean>(1);
   }
 
   ngOnInit(){

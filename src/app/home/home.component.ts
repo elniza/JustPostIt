@@ -4,6 +4,7 @@ import {Confession} from "../models/confession.model";
 import {UsersService} from "../users.service";
 import {Subject, Subscription} from "rxjs";
 import {takeUntil} from "rxjs/operators";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-home',
@@ -16,16 +17,11 @@ export class HomeComponent implements OnInit {
   isLoggedIn: boolean;
 
   constructor(private confessionsService: ConfessionsService,
-              private  usersService: UsersService) { }
+              private  usersService: UsersService,
+              private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.confessionsService.getConfessions()
-      .pipe(
-        takeUntil(this.ngUnsubscribe)
-      )
-      .subscribe((response: Response) => {
-        this.confessions = (response.length == 0) ? null : response;
-      });
+    this.confessions = this.route.snapshot.data['confessions'];
     this.usersService.loggedInUser
       .pipe(
         takeUntil(this.ngUnsubscribe)

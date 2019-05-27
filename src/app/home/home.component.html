@@ -3,7 +3,7 @@
 <hr>
 </div>
 <div class="container">
-  <div *ngIf="confessions;else no_confessions" class="row">
+  <div *ngIf="confessions.length != 0;else no_confessions" class="row">
       <app-minimized-confession class="col-md-6"
         *ngFor="let currentConfession of confessions;" [confession]="currentConfession"></app-minimized-confession>
   </div>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, Data, Router} from "@angular/router";
 import {ConfessionsService} from "../../confessions.service";
 import {Confession} from "../../models/confession.model";
 import {Subject, Subscription} from "rxjs";
@@ -31,28 +31,10 @@ isLoggedIn: boolean;
               private commentsService: CommentsService) { }
 
   ngOnInit() {
-    this.commentsService.isCommentDeleted
-      .pipe(
-        takeUntil(this.ngUnsubscribe)
-      )
-      .subscribe(
-        () => {
-          this.init();
-    }
-      )
-  }
-
-  init(){
     this.id = this.route.snapshot.paramMap.get('id');
-    this.confessionsService.getConfession(this.id)
+    this.confession = this.route.snapshot.data['confession'];
+    this.usersService.loggedInUser
       .pipe(
-        concatMap(
-          (response: Response) => {
-            console.log(response);
-            this.confession = response;
-            return this.usersService.loggedInUser;
-          }
-        ),
         takeUntil(this.ngUnsubscribe)
       )
       .subscribe(
@@ -61,6 +43,17 @@ isLoggedIn: boolean;
           this.isConfessionOwner = (user && user.id == this.confession.author);
         }
       );
+    this.commentsService.isCommentDeleted
+      .pipe(
+        concatMap(
+          () => { return this.confessionsService.getConfession(this.id); }
+          ),
+        takeUntil(this.ngUnsubscribe)
+      )
+      .subscribe(
+        (response: any) => {
+          this.confession = response;
+        });
   }
 
   ngOnDestroy(){
