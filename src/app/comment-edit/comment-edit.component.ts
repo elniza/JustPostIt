@@ -48,9 +48,12 @@ export class CommentEditComponent implements OnInit {
           takeUntil(this.ngUnsubscribe)
         )
         .subscribe(
-          (response: Response) => {
-            this.location.back();
-            this.toastrService.success(response.message, 'Add comment');
+          (response: any) => {
+            this.router.navigate(['confessions', this.confessionId],
+              {state: {toastrMessage: response.message, toastrTitle: 'Create comment'}});
+          },
+          (err) => {
+            this.toastrService.error(err.error, 'Create comment error');
           }
         );
     }
@@ -60,9 +63,12 @@ export class CommentEditComponent implements OnInit {
           takeUntil(this.ngUnsubscribe)
         )
         .subscribe(
-          (response: Response) => {
-            this.location.back();
-            this.toastrService.success(response.message, 'Edit comment');
+          (response: any) => {
+            this.router.navigate(['confessions', this.confessionId],
+              {state: {toastrMessage: response.message, toastrTitle: 'Edit comment'}});
+          },
+          (err) => {
+            this.toastrService.error(err.error, 'Edit comment error');
           }
         );
     }

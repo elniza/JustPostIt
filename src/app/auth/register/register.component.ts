@@ -32,14 +32,13 @@ export class RegisterComponent implements OnInit {
     const username = form.controls['username'].value;
     const password = form.controls['password'].value;
 
-    this.usersService.saveUser(username, password)
+    this.usersService.signUp(username, password)
       .pipe(
         takeUntil(this.ngUnsubscribe)
       )
       .subscribe(
-        (response: Response) => {
-          this.router.navigate(['/']);
-          this.toastrService.success(response.message, 'Signed up');
+        (response: any) => {
+          this.router.navigate(['/'], {state: {toastrMessage: response.message, toastrTitle: 'Signed up'}});
         },
         (err) => {
           this.toastrService.error(err.error, 'Sign up error');

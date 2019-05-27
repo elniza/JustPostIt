@@ -41,7 +41,12 @@ import { CommentComponent } from './comment/comment.component';
     ReactiveFormsModule,
     FormsModule,
     HttpClientModule,
-    ToastNoAnimationModule.forRoot()
+    ToastNoAnimationModule.forRoot(
+      {
+        preventDuplicates: true,
+        closeButton: true
+      }
+    )
   ],
   providers: [ConfessionsService, UsersService, RoutesService, CommentsService],
   bootstrap: [AppComponent]

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve} from '@angular/router';
+import { Resolve} from '@angular/router';
 import { Observable } from 'rxjs';
 import {ConfessionsService} from "./confessions.service";
 
@@ -11,11 +11,7 @@ export class ConfessionsResolverService implements Resolve<any> {
               private confessionsService: ConfessionsService) { }
 
   resolve(): Observable<any> {
-    console.log('resolve');
-    return this.confessionsService.getConfessions()
-      .pipe(
-        // take(1)
-      );
+    return this.confessionsService.getConfessions();
   }
 
 }

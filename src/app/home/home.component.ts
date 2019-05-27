@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import {ConfessionsService} from "../confessions.service";
 import {Confession} from "../models/confession.model";
 import {UsersService} from "../users.service";
-import {Subject, Subscription} from "rxjs";
+import {Subject} from "rxjs";
 import {takeUntil} from "rxjs/operators";
 import {ActivatedRoute} from "@angular/router";
+import {Shared} from "../shared/shared";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-home',
@@ -17,8 +19,9 @@ export class HomeComponent implements OnInit {
   isLoggedIn: boolean;
 
   constructor(private confessionsService: ConfessionsService,
-              private  usersService: UsersService,
-              private route: ActivatedRoute) { }
+              private usersService: UsersService,
+              private route: ActivatedRoute,
+              private toastrService: ToastrService) { }
 
   ngOnInit() {
     this.confessions = this.route.snapshot.data['confessions'];
@@ -31,6 +34,9 @@ export class HomeComponent implements OnInit {
         this.isLoggedIn = (user != null);
       });
 
+  }
+  ngAfterViewInit() {
+    Shared.showFlashMessageIfNeeded(this.toastrService);
   }
 
   ngOnDestroy(){

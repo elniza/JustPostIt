@@ -34,13 +34,11 @@ export class LoginComponent implements OnInit {
          takeUntil(this.ngUnsubscribe)
        )
        .subscribe(
-       (response: Response) => {
-         this.router.navigate(['/']);
-         this.toastrService.success(response.message, 'Logged in');
+       (response: any) => {
+         this.router.navigate(['/'], {state: {toastrMessage: response.message, toastrTitle: 'Logged in'}});
        },
        (err) => {
-         this.toastrService.error('Login error');
-         console.log(err);
+         this.toastrService.error(err.error, 'Login error');
        }
      );
    }

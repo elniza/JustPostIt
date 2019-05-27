@@ -8,6 +8,7 @@ import {UsersService} from "../../users.service";
 import {Location} from "@angular/common";
 import {ToastrService} from "ngx-toastr";
 import {CommentsService} from "../../comments.service";
+import {Shared} from "../../shared/shared";
 
 @Component({
   selector: 'app-post',
@@ -38,7 +39,7 @@ isLoggedIn: boolean;
         takeUntil(this.ngUnsubscribe)
       )
       .subscribe(
-        (user: object) => {
+        (user: any) => {
           this.isLoggedIn = (user != null);
           this.isConfessionOwner = (user && user.id == this.confession.author);
         }
@@ -53,7 +54,14 @@ isLoggedIn: boolean;
       .subscribe(
         (response: any) => {
           this.confession = response;
+        },
+        (err) => {
+
         });
+  }
+
+  ngAfterViewInit() {
+    Shared.showFlashMessageIfNeeded(this.toastrService);
   }
 
   ngOnDestroy(){
@@ -71,9 +79,12 @@ isLoggedIn: boolean;
         takeUntil(this.ngUnsubscribe)
       )
       .subscribe(
-        (response: Response) => {
-          this.location.back();
-          this.toastrService.success(response.message, 'Delete confession');
+        (response: any) => {
+          this.router.navigate(['/'],
+            {state: {toastrMessage: response.message, toastrTitle: 'Delete confession'}});
+        },
+        (err) => {
+          this.toastrService.error(err.error, 'Delete confession error');
         }
       );
   }

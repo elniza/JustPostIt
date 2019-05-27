@@ -52,9 +52,12 @@ export class ConfessionEditComponent implements OnInit {
           takeUntil(this.ngUnsubscribe)
         )
         .subscribe(
-          (response: Response) => {
-           this.location.back();
-           this.toastrService.success(response.message, 'Add confession');
+          (response: any) => {
+           this.router.navigate(['/'],
+             {state: {toastrMessage: response.message, toastrTitle: 'Add confession'}});
+          },
+          (err) => {
+            this.toastrService.error(err.error, 'Add confession error');
           }
         );
     }
@@ -64,10 +67,15 @@ export class ConfessionEditComponent implements OnInit {
           takeUntil(this.ngUnsubscribe)
         )
         .subscribe(
-          (response: Response) => {
-            this.location.back();
-          this.toastrService.success(response.message, 'Update confession');
-        });
+          (response: any) => {
+            this.router.navigate(['confessions', this.id],
+              {state: {toastrMessage: response.message, toastrTitle: 'Edit confession'}});
+          },
+          (err) => {
+            this.toastrService.error(err.error, 'Edit confession error');
+          }
+
+        );
     }
 }
 

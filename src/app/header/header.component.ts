@@ -11,15 +11,13 @@ import {ToastrService} from "ngx-toastr";
 export class HeaderComponent implements OnInit {
 
   loggedInUser: string;
-//subscription: Subscription;
 
-  constructor(private usersService: UsersService,
-              private toastrService: ToastrService) { }
+  constructor(private usersService: UsersService) { }
 
   ngOnInit() {
-    /*this.subscription = */this.usersService.loggedInUser
+    this.usersService.loggedInUser
       .subscribe(
-        (user: object) => {
+        (user: any) => {
             this.loggedInUser = (user ? user.username : null);
         }
       );
@@ -27,12 +25,8 @@ export class HeaderComponent implements OnInit {
 
   onLogout(){
     const user = this.loggedInUser;
-    this.usersService.logout();
-    this.toastrService.success("User '" + user + "' logged out successfully!", 'Logged out');
+    const logoutMessage = "User '" + user + "' logged out successfully!";
+    this.usersService.logout(logoutMessage);
   }
-
-  // ngOnDestroy(){
-  //   this.subscription.unsubscribe();
-  // }
 
 }

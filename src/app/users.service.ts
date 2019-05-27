@@ -4,12 +4,14 @@ import {Injectable} from "@angular/core";
 import {catchError, map} from "rxjs/operators";
 import {BehaviorSubject} from "rxjs";
 import {Shared} from "./shared/shared";
+import {ToastrService} from "ngx-toastr";
 
 @Injectable()
 export class UsersService{
   loggedInUser: BehaviorSubject<Object>;
 
-  constructor(private http: HttpClient){
+  constructor(private http: HttpClient,
+              private toastrService: ToastrService){
     this.loggedInUser = new BehaviorSubject<Object>(null);
   }
 
@@ -25,17 +27,18 @@ export class UsersService{
     localStorage.removeItem('jwt');
   }
 
-  logout() {
+  logout(logoutMessage: string) {
     this.destroyToken();
     this.loggedInUser.next(null);
+    this.toastrService.success(logoutMessage, "Logged out");
   }
 
-  saveUser(username: string, password: string){
+  signUp(username: string, password: string){
     const body = new HttpParams()
       .set('username', username)
       .set('password', password);
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-    return this.http.post("http://localhost:4000/api/saveUser", body.toString(), {headers: headers})
+    return this.http.post("http://localhost:4000/api/signUp", body.toString(), {headers: headers})
       .pipe(
         catchError(Shared.handleError)
       );
@@ -48,7 +51,7 @@ export class UsersService{
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     return this.http.post("http://localhost:4000/api/login", body.toString(), {headers: headers})
       .pipe(
-      map((response: Response) => {
+      map((response: any) => {
         this.loggedInUser.next({'username': `${response.username}`, 'id': `${response.user_id}`});
         this.saveToken(response.token);
         return response;

@@ -11,11 +11,7 @@ export class ConfessionResolverService implements Resolve<any> {
               private confessionsService: ConfessionsService) { }
 
   resolve(route: ActivatedRouteSnapshot): Observable<any> {
-    console.log('resolve');
-    return this.confessionsService.getConfession(route.params['id'])
-      .pipe(
-       // take(1)
-      );
+    return this.confessionsService.getConfession(route.params['id']);
   }
 
 }

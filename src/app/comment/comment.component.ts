@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {UsersService} from "../users.service";
 import {CommentsService} from "../comments.service";
 import {ToastrService} from "ngx-toastr";
-import {BehaviorSubject, Subject, Subscription} from "rxjs";
+import {Subject} from "rxjs";
 import {takeUntil} from "rxjs/operators";
 
 @Component({
@@ -30,7 +30,7 @@ export class CommentComponent implements OnInit {
         takeUntil(this.ngUnsubscribe)
       )
       .subscribe(
-        (user: Object) => {
+        (user: any) => {
           this.isCommentOwner = (user && user.id == this.comment.author.id);
         }
       )
@@ -51,9 +51,12 @@ export class CommentComponent implements OnInit {
        takeUntil(this.ngUnsubscribe)
      )
       .subscribe(
-        (response: Response) => {
+        (response: any) => {
           this.commentsService.isCommentDeleted.next(true);
           this.toastrService.success(response.message, 'Delete comment');
+        },
+        (err) => {
+          this.toastrService.error(err.error, 'Delete comment error');
         }
       );
   }
