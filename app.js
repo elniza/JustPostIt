@@ -7,7 +7,7 @@ const express = require('express'),
   cors = require('cors');
 
 const User = require('./src/app/models/user.model').User;
-const Confession = require('./src/app/models/confession.model').Confession;
+const Post = require('./src/app/models/post.model').Post;
 const Comment = require('./src/app/models/comment.model').Comment;
 
 const db = "mongodb://elnatan:a12345678z@ds129723.mlab.com:29723/confessions_db";
@@ -75,25 +75,25 @@ app.use(cors());
       else return res.status(401).json("Password is incorrect");
   })})});
 
-app.post('/api/confessions', verifyToken, (req, res) => {
+app.post('/api/posts', verifyToken, (req, res) => {
   const { title, content } = req.body;
   const userId = res.locals.user.id;
   User.findById(userId, (err, user) => {
     if (err) { return serverProblemLogger(req, res, err); }
     const date = new Date();
     const author = {id: user, username: user.username};
-    const newConfession = {author: author, title: title, content: content, date: date};
-    Confession.create(newConfession, (err) => {
+    const newPost = {author: author, title: title, content: content, date: date};
+    Post.create(newPost, (err) => {
       if(err){ return serverProblemLogger(req, res, err); }
-      else res.status(200).json({ message: "Confession was added successfully!" });
+      else res.status(200).json({ message: "Post was added successfully!" });
     });
   });
 });
 
-app.post('/api/confessions/:id/comments', verifyToken, async (req, res) => {
+app.post('/api/posts/:id/comments', verifyToken, async (req, res) => {
   const userId = res.locals.user.id;
   const content = req.body.content;
-  let confession = await getConfession(req.params.id);
+  let post = await getPost(req.params.id);
   Comment.create({content: content}, (err, comment) => {
     if(err){ return serverProblemLogger(req, res, err); }
       User.findById(userId, (err, user) => {
@@ -101,47 +101,56 @@ app.post('/api/confessions/:id/comments', verifyToken, async (req, res) => {
           comment.author.id = userId;
           comment.author.username = user.username;
           comment.date = new Date();
+          comment.belongsTo = post;
           comment.save();
-          confession.comments.push(comment);
-          confession.save();
+          post.comments.push(comment);
+          post.save();
           res.status(200).json({ message: "Comment was added successfully!" });
       });
   })
 });
 
-app.get("/api/confessions", (req, res) => {
-  Confession.find({}, (err, allConfessions) => {
+app.get("/api/posts", (req, res) => {
+  Post.find({}, (err, allPosts) => {
     if (err) { return serverProblemLogger(req, res, err); }
-    else res.json(allConfessions);
+    else res.json(allPosts);
   });
 });
 
-app.delete("/api/confessions/:id", verifyToken, async (req, res) => {
+app.delete("/api/posts/:id", verifyToken, async (req, res) => {
   const userId = res.locals.user.id;
-  const confession = await getConfession(req.params.id);
-  if(userId == confession.author.id){
-    Confession.findByIdAndRemove(req.params.id, (err) => {
-      if (err) { return serverProblemLogger(req, res, err); }
-      else res.status(200).json({ message: "Confession was deleted successfully!" });
-    });
-  }
-  else { return serverProblemLogger(req, res, "The user is not confession's author"); }
+  const postId = req.params.id;
+  Post.findById(postId, (err, foundPost) => {
+    if (err) { return serverProblemLogger(req, res, err); }
+    if(userId == foundPost.author.id){
+      for(let commentId of foundPost.comments){
+        Comment.findByIdAndRemove(commentId, (err) => {
+          if (err) { return serverProblemLogger(req, res, err); }
+        });
+      }
+      Post.findByIdAndRemove(postId, (err) => {
+        if (err) { return serverProblemLogger(req, res, err); }
+        else res.status(200).json({ message: "Post was deleted successfully!" });
+      });
+    }
+    else { return serverProblemLogger(req, res, "The user is not the post's author"); }
+  });
 });
 
-app.get("/api/confessions/:id", async (req, res) => {
-  res.json(await getConfession(req.params.id));
+app.get("/api/posts/:id", async (req, res) => {
+  res.json(await getPost(req.params.id));
 });
 
-app.put("/api/confessions/:id", verifyToken, async (req, res) => {
+app.put("/api/posts/:id", verifyToken, async (req, res) => {
   const userId = res.locals.user.id;
-  const confession = await getConfession(req.params.id);
-  if(userId == confession.author.id){
-    Confession.findByIdAndUpdate(req.params.id, req.body, (err) => {
+  const post = await getPost(req.params.id);
+  if(userId == post.author.id){
+    Post.findByIdAndUpdate(req.params.id, req.body, (err) => {
       if (err) { return serverProblemLogger(req, res, err); }
-      else res.status(200).json({ message: "Confession was updated successfully!" });
+      else res.status(200).json({ message: "Post was updated successfully!" });
     });
   }
-  else { return serverProblemLogger(req, res, "The user is not confession's author"); }
+  else { return serverProblemLogger(req, res, "The user is not the post's author"); }
 });
 
 app.put("/api/comments/:comment_id", verifyToken, (req, res) => {
@@ -150,35 +159,54 @@ app.put("/api/comments/:comment_id", verifyToken, (req, res) => {
     Comment.findById(commentId, (err, foundComment) => {
       if (err) { return serverProblemLogger(req, res, err); }
         if(foundComment.author.id == userId){
-          Comment.findByIdAndUpdate(commentId, req.body, (err) => {
-            if (err) { return serverProblemLogger(req, res, err); }
-            else res.status(200).json({ message: "Comment was updated successfully!" });
-          });
-        }
+            Comment.findByIdAndUpdate(commentId, req.body, (err) => {
+              if (err) { return serverProblemLogger(req, res, err); }
+              else res.status(200).json({ message: "Comment was updated successfully!" });
+            });
+          }
+        else { return serverProblemLogger(req, res, "The user is not the comment's author"); }
     });
-}
-);
+        });
 
 app.delete("/api/comments/:comment_id", verifyToken, (req, res) => {
     const userId = res.locals.user.id;
     const commentId = req.params.comment_id;
     Comment.findById(commentId, (err, foundComment) => {
-      if (err) { return serverProblemLogger(req, res, err); }
-      if(foundComment.author.id == userId){
-          Comment.findByIdAndRemove(commentId, (err) => {
-            if (err) { return serverProblemLogger(req, res, err); }
-            else res.status(200).json({ message: "Comment was deleted successfully!" });
+      if (err) {
+        return serverProblemLogger(req, res, err);
+      }
+      if (foundComment.author.id == userId) {
+        const postId = foundComment.belongsTo;
+        Post.findById(postId, (err, foundPost) => {
+          if (err) {
+            return serverProblemLogger(req, res, err);
+          }
+          const comments = foundPost.comments;
+          foundPost.comments = comments.filter((val) => {
+            return (val != `${foundComment._id}`)
           });
-        }
+          foundPost.save();
+          Comment.findByIdAndRemove(commentId, (err) => {
+            if (err) {
+              return serverProblemLogger(req, res, err);
+            }
+            else res.status(200).json({message: "Comment was deleted successfully!"});
+          });
+
+        });
+      }
+      else {
+        return serverProblemLogger(req, res, "The user is not the comment's author");
+      }
     });
   }
 );
 
-function getConfession(id){
+function getPost(id){
   return new Promise((resolve, reject) => {
-    Confession.findById(id).populate("comments").exec((err, foundConfession) => {
+    Post.findById(id).populate("comments").exec((err, foundPost) => {
       if(err){ reject(err); }
-      resolve(foundConfession);
+      resolve(foundPost);
     });
   });
 }

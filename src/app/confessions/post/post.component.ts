@@ -1,57 +1,56 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import {ConfessionsService} from "../../confessions.service";
-import {Confession} from "../../models/confession.model";
+import {PostsService} from "../posts.service";
 import {Subject} from "rxjs";
 import {concatMap, takeUntil} from 'rxjs/operators';
-import {UsersService} from "../../users.service";
-import {Location} from "@angular/common";
+import {AuthService} from "../../auth/auth.service";
 import {ToastrService} from "ngx-toastr";
 import {Shared} from "../../shared/shared";
 
 @Component({
   selector: 'app-post',
-  templateUrl: './confession.component.html',
-  styleUrls: ['./confession.component.css']
+  templateUrl: './post.component.html',
+  styleUrls: ['./post.component.css']
 })
-export class ConfessionComponent implements OnInit {
+export class PostComponent implements OnInit {
   private ngUnsubscribe = new Subject();
 id: string;
-confession;
-isConfessionOwner: boolean;
+post;
+isPostOwner: boolean;
 isLoggedIn: boolean;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
-              private confessionsService: ConfessionsService,
-              private usersService: UsersService,
-              private location: Location,
+              private postsService: PostsService,
+              private authService: AuthService,
               private toastrService: ToastrService) { }
 
   ngOnInit() {
+    console.log('in');
     this.id = this.route.snapshot.paramMap.get('id');
     //resolver data
-    this.confession = this.route.snapshot.data['confession'];
-    this.usersService.loggedInUser
+    this.post = this.route.snapshot.data['post'];
+    console.log(this.post);
+    this.authService.loggedInUser
       .pipe(
         takeUntil(this.ngUnsubscribe)
       )
       .subscribe(
         (user: any) => {
           this.isLoggedIn = (user != null);
-          this.isConfessionOwner = (user && user.id == this.confession.author.id);
+          this.isPostOwner = (user && user.id == this.post.author.id);
         }
       );
-    this.confessionsService.isConfessionChanged
+    this.postsService.isPostChanged
       .pipe(
         concatMap(
-          () => { return this.confessionsService.getConfession(this.id); }
+          () => { return this.postsService.getPost(this.id); }
           ),
         takeUntil(this.ngUnsubscribe)
       )
       .subscribe(
         (response: any) => {
-          this.confession = response;
+          this.post = response;
         },
         (err) => {
 
@@ -67,22 +66,22 @@ isLoggedIn: boolean;
     this.ngUnsubscribe.complete();
   }
 
-  onEditConfession(){
+  onEditPost(){
     this.router.navigate(['edit'],
-      {state: {title: this.confession.title, content: this.confession.content}, relativeTo: this.route});
+      {state: {title: this.post.title, content: this.post.content}, relativeTo: this.route});
   }
-  onDeleteConfession(){
-    this.confessionsService.deleteConfession(this.id)
+  onDeletePost(){
+    this.postsService.deletePost(this.id)
       .pipe(
         takeUntil(this.ngUnsubscribe)
       )
       .subscribe(
         (response: any) => {
           this.router.navigate(['/'],
-            {state: {toastrMessage: response.message, toastrTitle: 'Delete confession'}});
+            {state: {toastrMessage: response.message, toastrTitle: 'Delete post'}});
         },
         (err) => {
-          this.toastrService.error(err.error, 'Delete confession error');
+          this.toastrService.error(err.error, 'Delete post error');
         }
       );
   }

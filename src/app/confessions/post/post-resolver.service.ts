@@ -2,16 +2,16 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve} from '@angular/router';
 import { Observable } from 'rxjs';
-import {ConfessionsService} from "./confessions.service";
+import {PostsService} from "../posts.service";
 
 @Injectable()
-export class ConfessionResolverService implements Resolve<any> {
+export class PostResolverService implements Resolve<any> {
 
   constructor(private http: HttpClient,
-              private confessionsService: ConfessionsService) { }
+              private postsService: PostsService) { }
 
   resolve(route: ActivatedRouteSnapshot): Observable<any> {
-    return this.confessionsService.getConfession(route.params['id']);
+    return this.postsService.getPost(route.params['id']);
   }
 
 }

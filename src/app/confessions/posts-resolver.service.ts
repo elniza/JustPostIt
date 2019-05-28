@@ -2,16 +2,16 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Resolve} from '@angular/router';
 import { Observable } from 'rxjs';
-import {ConfessionsService} from "./confessions.service";
+import {PostsService} from "./posts.service";
 
 @Injectable()
-export class ConfessionsResolverService implements Resolve<any> {
+export class PostsResolverService implements Resolve<any> {
 
   constructor(private http: HttpClient,
-              private confessionsService: ConfessionsService) { }
+              private postsService: PostsService) { }
 
   resolve(): Observable<any> {
-    return this.confessionsService.getConfessions();
+    return this.postsService.getPosts();
   }
 
 }

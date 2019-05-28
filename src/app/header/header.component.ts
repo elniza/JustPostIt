@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {UsersService} from "../users.service";
-import {Subscribable, Subscription} from "rxjs";
-import {ToastrService} from "ngx-toastr";
+import {AuthService} from "../auth/auth.service";
 
 @Component({
   selector: 'app-header',
@@ -9,13 +7,12 @@ import {ToastrService} from "ngx-toastr";
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-
   loggedInUser: string;
 
-  constructor(private usersService: UsersService) { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit() {
-    this.usersService.loggedInUser
+    this.authService.loggedInUser
       .subscribe(
         (user: any) => {
             this.loggedInUser = (user ? user.username : null);
@@ -26,7 +23,7 @@ export class HeaderComponent implements OnInit {
   onLogout(){
     const user = this.loggedInUser;
     const logoutMessage = "User '" + user + "' logged out successfully!";
-    this.usersService.logout(logoutMessage);
+    this.authService.logout(logoutMessage);
   }
 
 }

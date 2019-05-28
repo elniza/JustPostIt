@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {ConfessionsService} from "../confessions.service";
-import {Confession} from "../models/confession.model";
-import {UsersService} from "../users.service";
+import {PostsService} from "../confessions/posts.service";
+import {AuthService} from "../auth/auth.service";
 import {Subject} from "rxjs";
 import {takeUntil} from "rxjs/operators";
 import {ActivatedRoute} from "@angular/router";
@@ -15,17 +14,17 @@ import {ToastrService} from "ngx-toastr";
 })
 export class HomeComponent implements OnInit {
   private ngUnsubscribe = new Subject();
-  confessions;
+  posts;
   isLoggedIn: boolean;
 
-  constructor(private confessionsService: ConfessionsService,
-              private usersService: UsersService,
+  constructor(private postsService: PostsService,
+              private authService: AuthService,
               private route: ActivatedRoute,
               private toastrService: ToastrService) { }
 
   ngOnInit() {
-    this.confessions = this.route.snapshot.data['confessions'];
-    this.usersService.loggedInUser
+    this.posts = this.route.snapshot.data['posts'];
+    this.authService.loggedInUser
       .pipe(
         takeUntil(this.ngUnsubscribe)
       )

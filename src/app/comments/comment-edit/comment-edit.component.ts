@@ -3,8 +3,7 @@ import {NgForm} from "@angular/forms";
 import {CommentsService} from "../comments.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ToastrService} from "ngx-toastr";
-import {Location} from "@angular/common";
-import {Subject, Subscription} from "rxjs";
+import {Subject} from "rxjs";
 import {takeUntil} from "rxjs/operators";
 
 @Component({
@@ -15,18 +14,17 @@ import {takeUntil} from "rxjs/operators";
 export class CommentEditComponent implements OnInit {
   private ngUnsubscribe = new Subject();
   action: string = 'Create';
-  confessionId: string;
+  postId: string;
   commentId: string;
   content: string;
 
   constructor(private commentsService: CommentsService,
               private route: ActivatedRoute,
               private router: Router,
-              private toastrService: ToastrService,
-              private location: Location) { }
+              private toastrService: ToastrService) { }
 
   ngOnInit() {
-    this.confessionId = this.route.snapshot.paramMap.get('id');
+    this.postId = this.route.snapshot.paramMap.get('id');
     this.commentId = this.route.snapshot.paramMap.get('comment_id');
     const urlSplitted = this.route.routeConfig.path.split('/');
     if(urlSplitted && urlSplitted[urlSplitted.length - 1] == 'edit'){
@@ -43,13 +41,13 @@ export class CommentEditComponent implements OnInit {
   commentAction(commentForm: NgForm){
     const content = commentForm.controls['content'].value;
     if(this.action == 'Create'){
-      this.commentsService.createComment(this.confessionId, content)
+      this.commentsService.createComment(this.postId, content)
         .pipe(
           takeUntil(this.ngUnsubscribe)
         )
         .subscribe(
           (response: any) => {
-            this.router.navigate(['confessions', this.confessionId],
+            this.router.navigate(['posts', this.postId],
               {state: {toastrMessage: response.message, toastrTitle: 'Create comment'}});
           },
           (err) => {
@@ -64,7 +62,7 @@ export class CommentEditComponent implements OnInit {
         )
         .subscribe(
           (response: any) => {
-            this.router.navigate(['confessions', this.confessionId],
+            this.router.navigate(['posts', this.postId],
               {state: {toastrMessage: response.message, toastrTitle: 'Edit comment'}});
           },
           (err) => {

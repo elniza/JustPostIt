@@ -12,7 +12,11 @@ module.exports.Comment = mongoose.model('Comment', new Schema({
     },
     username: String
   },
-  date: Date
+  date: Date,
+  belongsTo: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Post"
+  }
 }));
 
 

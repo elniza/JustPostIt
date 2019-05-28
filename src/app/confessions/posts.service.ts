@@ -1,70 +1,66 @@
-import {Confession} from "./models/confession.model";
+import {Post} from "../models/post.model";
 import {Injectable} from "@angular/core";
-import {UsersService} from "./users.service";
-import {User} from "./models/user.model";
+import {AuthService} from "../auth/auth.service";
+import {User} from "../models/user.model";
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {catchError} from "rxjs/operators";
-import {Shared} from "./shared/shared";
+import {Shared} from "../shared/shared";
 import {ReplaySubject} from "rxjs";
 
 @Injectable()
-export class ConfessionsService{
-  isConfessionChanged: ReplaySubject<boolean>;
+export class PostsService{
+  isPostChanged: ReplaySubject<boolean>;
 
-  constructor(private usersService: UsersService,
+  constructor(private authService: AuthService,
               private http: HttpClient){
-    this.isConfessionChanged = new ReplaySubject<boolean>(1);
+    this.isPostChanged = new ReplaySubject<boolean>(1);
   }
 
-    ngOnInit(){
-    }
-
-  createConfession(title: string, content: string){
-
+  createPost(title: string, content: string){
     const body = new HttpParams()
       .set('title', title)
       .set('content', content);
     const headers = new HttpHeaders()
       .set('Content-Type', 'application/x-www-form-urlencoded')
        .set('Authorization', localStorage.getItem('jwt'));
-    return this.http.post("http://localhost:4000/api/confessions", body.toString(), {headers: headers})
+    return this.http.post("http://localhost:4000/api/posts", body.toString(), {headers: headers})
       .pipe(
       catchError(Shared.handleError)
     );
   }
 
-  getConfessions(){
-     return this.http.get("http://localhost:4000/api/confessions")
+  getPosts(){
+     return this.http.get("http://localhost:4000/api/posts")
        .pipe(
          catchError(Shared.handleError)
        );
   }
 
-  getConfession(id: string){
-    return this.http.get("http://localhost:4000/api/confessions/" + id)
+  getPost(id: string){
+    return this.http.get("http://localhost:4000/api/posts/" + id)
       .pipe(
         catchError(Shared.handleError)
       );
   }
 
-  deleteConfession(id: string){
+  deletePost(id: string){
     const headers = new HttpHeaders()
       .set('Content-Type', 'application/x-www-form-urlencoded')
       .set('Authorization', localStorage.getItem('jwt'));
-    return this.http.delete("http://localhost:4000/api/confessions/" + id, {headers: headers})
+    return this.http.delete("http://localhost:4000/api/posts/" + id, {headers: headers})
       .pipe(
         catchError(Shared.handleError)
       );
   }
 
-  editConfession(id: string, title: string, content: string){
+  editPost(id: string, title: string, content: string){
     const body = new HttpParams()
       .set('title', title)
       .set('content', content);
     const headers = new HttpHeaders()
       .set('Content-Type', 'application/x-www-form-urlencoded')
       .set('Authorization', localStorage.getItem('jwt'));
-    return this.http.put("http://localhost:4000/api/confessions/" + id, body.toString(), {headers: headers})
+    return this.http.put("http://localhost:4000/api/posts/" + id, body.toString(), {headers: headers})
       .pipe(
         catchError(Shared.handleError)
       );

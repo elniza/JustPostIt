@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {UsersService} from "../../users.service";
+import {AuthService} from "../auth.service";
 import {ToastrService} from "ngx-toastr";
 import {Router} from "@angular/router";
 import {Subject} from "rxjs";
@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
   username: FormControl;
   password: FormControl;
 
-  constructor(private usersService: UsersService,
+  constructor(private authService: AuthService,
               private toastrService: ToastrService,
               private router: Router,
               private formBuilder: FormBuilder) { }
@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit {
 
    onLogin(){
      const { username, password } = this.form.value;
-     this.usersService.login(username, password)
+     this.authService.login(username, password)
        .pipe(
          takeUntil(this.ngUnsubscribe)
        )

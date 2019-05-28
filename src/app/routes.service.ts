@@ -1,14 +1,12 @@
 import {Injectable} from "@angular/core";
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
-import {UsersService} from "./users.service";
+import {AuthService} from "./auth/auth.service";
 import {ToastrService} from "ngx-toastr";
-import {ConfessionsService} from "./confessions.service";
 
 @Injectable()
 export class RoutesService implements CanActivate{
 
-  constructor(private usersService: UsersService,
-              private confessionsService: ConfessionsService,
+  constructor(private authService: AuthService,
               private router: Router,
               private toastrService: ToastrService) {}
 
@@ -16,7 +14,7 @@ export class RoutesService implements CanActivate{
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot){
-    if(!this.usersService.getToken()){
+    if(!this.authService.getToken()){
       //the real token check will be in the backend
       this.router.navigate(['login']);
       this.toastrService.error("Don't be a smartass, you aren't logged in", 'Unauthorized');

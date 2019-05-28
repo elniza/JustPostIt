@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {UsersService} from "../../users.service";
+import {AuthService} from "../auth.service";
 import {Router} from "@angular/router";
 import {Subject} from "rxjs";
 import {ToastrService} from "ngx-toastr";
@@ -19,7 +19,7 @@ export class RegisterComponent implements OnInit {
   username: FormControl;
   password: FormControl;
 
-  constructor(private usersService: UsersService,
+  constructor(private authService: AuthService,
               private toastrService: ToastrService,
               private router: Router,
               private formBuilder: FormBuilder) {}
@@ -54,7 +54,7 @@ export class RegisterComponent implements OnInit {
 
   onSignUp(){
    const { username, password } = this.form.value;
-    this.usersService.signUp(username, password)
+    this.authService.signUp(username, password)
       .pipe(
         takeUntil(this.ngUnsubscribe)
       )

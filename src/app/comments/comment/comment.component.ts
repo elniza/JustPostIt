@@ -1,11 +1,11 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import {UsersService} from "../users.service";
+import {AuthService} from "../../auth/auth.service";
 import {CommentsService} from "../comments.service";
 import {ToastrService} from "ngx-toastr";
 import {Subject} from "rxjs";
 import {takeUntil} from "rxjs/operators";
-import {ConfessionsService} from "../confessions.service";
+import {PostsService} from "../../confessions/posts.service";
 
 @Component({
   selector: 'app-comment',
@@ -20,14 +20,14 @@ export class CommentComponent implements OnInit {
 
   constructor(private router: Router,
               private route: ActivatedRoute,
-              private usersService: UsersService,
+              private authService: AuthService,
               private commentsService: CommentsService,
               private toastrService: ToastrService,
-              private confessionsService: ConfessionsService) { }
+              private postsService: PostsService) { }
 
   ngOnInit() {
     this.commentId = this.comment._id;
-    this.usersService.loggedInUser
+    this.authService.loggedInUser
       .pipe(
         takeUntil(this.ngUnsubscribe)
       )
@@ -54,7 +54,7 @@ export class CommentComponent implements OnInit {
      )
       .subscribe(
         (response: any) => {
-          this.confessionsService.isConfessionChanged.next(true);
+          this.postsService.isPostChanged.next(true);
           this.toastrService.success(response.message, 'Delete comment');
         },
         (err) => {

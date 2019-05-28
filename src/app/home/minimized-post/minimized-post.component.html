@@ -1,0 +1,17 @@
+
+    <div class="img-thumbnail">
+      <h1>{{post.author.username}}</h1>
+      <h3>{{post.title}}</h3>
+      <p>{{post.date}}</p>
+
+      <p>{{post.content.substr(0, 200)}} {{post.content.length > 200 ? '[...]' : ''}}</p>
+      <div>
+        <a class="btn btn-info" [routerLink]="['posts', post._id]">Read More</a>
+        <div class="float-right">
+          <span>{{post.comments.length}} Comments</span>
+        </div>
+
+      </div>
+    </div>
+
+

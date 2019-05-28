@@ -1,13 +1,13 @@
-import {User} from "./models/user.model";
+import {User} from "../models/user.model";
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {Injectable} from "@angular/core";
 import {catchError, map} from "rxjs/operators";
 import {BehaviorSubject} from "rxjs";
-import {Shared} from "./shared/shared";
+import {Shared} from "../shared/shared";
 import {ToastrService} from "ngx-toastr";
 
 @Injectable()
-export class UsersService{
+export class AuthService{
   loggedInUser: BehaviorSubject<Object>;
 
   constructor(private http: HttpClient,
