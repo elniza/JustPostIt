@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {NgForm} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {UsersService} from "../../users.service";
 import {ToastrService} from "ngx-toastr";
 import {Router} from "@angular/router";
-import {Subject, Subscription} from "rxjs";
+import {Subject} from "rxjs";
 import {takeUntil} from "rxjs/operators";
 
 @Component({
@@ -13,12 +13,23 @@ import {takeUntil} from "rxjs/operators";
 })
 export class LoginComponent implements OnInit {
   private ngUnsubscribe = new Subject();
+  form: FormGroup;
+  username: FormControl;
+  password: FormControl;
 
   constructor(private usersService: UsersService,
               private toastrService: ToastrService,
-              private router: Router) { }
+              private router: Router,
+              private formBuilder: FormBuilder) { }
 
   ngOnInit() {
+    //we did all the checks in register component
+    this.username = new FormControl("", Validators.required);
+    this.password = new FormControl("", Validators.required);
+    this.form = this.formBuilder.group({
+      username: this.username,
+      password: this.password
+    });
   }
 
   ngOnDestroy(){
@@ -26,9 +37,8 @@ export class LoginComponent implements OnInit {
     this.ngUnsubscribe.complete();
   }
 
-   onLogin(form: NgForm){
-     const username = form.controls['username'].value;
-     const password = form.controls['password'].value;
+   onLogin(){
+     const { username, password } = this.form.value;
      this.usersService.login(username, password)
        .pipe(
          takeUntil(this.ngUnsubscribe)

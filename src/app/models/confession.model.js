@@ -5,19 +5,16 @@ const Schema = mongoose.Schema;
 // set up a mongoose model and pass it using module.exports
 module.exports.Confession = mongoose.model('Confession', new Schema({
   author: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User"
+    id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+    },
+    username: String
   },
   title: String,
   content: String,
-  likes: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User"
-    }
-  ],
-  date: Date
-  ,comments: [
+  date: Date,
+  comments: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Comment"

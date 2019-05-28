@@ -5,12 +5,16 @@ import {User} from "./models/user.model";
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {catchError} from "rxjs/operators";
 import {Shared} from "./shared/shared";
+import {ReplaySubject} from "rxjs";
 
 @Injectable()
 export class ConfessionsService{
+  isConfessionChanged: ReplaySubject<boolean>;
 
   constructor(private usersService: UsersService,
-              private http: HttpClient){}
+              private http: HttpClient){
+    this.isConfessionChanged = new ReplaySubject<boolean>(1);
+  }
 
     ngOnInit(){
     }
@@ -65,31 +69,5 @@ export class ConfessionsService{
         catchError(Shared.handleError)
       );
   }
-
-
-//   startEditingAndSendIndex(id: number){
-//     this.startedEditing.next(id);
-//   }
-//
-//   addLike(id: number, user: User){
-//     this.getConfession(id).likes.push(user);
-//   }
-//
-//   removeLike(id: number, user: User){
-//    const index = this.getConfession(id).likes.indexOf(user);
-//    this.getConfession(id).likes.splice(index, 1);
-//   }
-//
-
-//   getConfession(id: number){
-//     return this.confessions[id];
-// }
-//
-//   addConfession(confession: Confession){
-//     return this.confessions.push(confession);
-//   }
-//   updateConfession(id: number, confession: Confession){
-//     this.confessions[id] = confession;
-//   }
 
 }

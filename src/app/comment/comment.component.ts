@@ -5,6 +5,7 @@ import {CommentsService} from "../comments.service";
 import {ToastrService} from "ngx-toastr";
 import {Subject} from "rxjs";
 import {takeUntil} from "rxjs/operators";
+import {ConfessionsService} from "../confessions.service";
 
 @Component({
   selector: 'app-comment',
@@ -21,7 +22,8 @@ export class CommentComponent implements OnInit {
               private route: ActivatedRoute,
               private usersService: UsersService,
               private commentsService: CommentsService,
-              private toastrService: ToastrService) { }
+              private toastrService: ToastrService,
+              private confessionsService: ConfessionsService) { }
 
   ngOnInit() {
     this.commentId = this.comment._id;
@@ -52,7 +54,7 @@ export class CommentComponent implements OnInit {
      )
       .subscribe(
         (response: any) => {
-          this.commentsService.isCommentDeleted.next(true);
+          this.confessionsService.isConfessionChanged.next(true);
           this.toastrService.success(response.message, 'Delete comment');
         },
         (err) => {

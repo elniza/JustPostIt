@@ -77,11 +77,12 @@ app.use(cors());
 
 app.post('/api/confessions', verifyToken, (req, res) => {
   const { title, content } = req.body;
-  const userId = res.locals.decoded.id;
+  const userId = res.locals.user.id;
   User.findById(userId, (err, user) => {
     if (err) { return serverProblemLogger(req, res, err); }
     const date = new Date();
-    const newConfession = {author: user, title: title, content: content, date: date};
+    const author = {id: user, username: user.username};
+    const newConfession = {author: author, title: title, content: content, date: date};
     Confession.create(newConfession, (err) => {
       if(err){ return serverProblemLogger(req, res, err); }
       else res.status(200).json({ message: "Confession was added successfully!" });
@@ -90,7 +91,7 @@ app.post('/api/confessions', verifyToken, (req, res) => {
 });
 
 app.post('/api/confessions/:id/comments', verifyToken, async (req, res) => {
-  const userId = res.locals.decoded.id;
+  const userId = res.locals.user.id;
   const content = req.body.content;
   let confession = await getConfession(req.params.id);
   Comment.create({content: content}, (err, comment) => {
@@ -116,14 +117,15 @@ app.get("/api/confessions", (req, res) => {
 });
 
 app.delete("/api/confessions/:id", verifyToken, async (req, res) => {
-  const userId = res.locals.decoded.id;
+  const userId = res.locals.user.id;
   const confession = await getConfession(req.params.id);
-  if(userId == confession.author){
+  if(userId == confession.author.id){
     Confession.findByIdAndRemove(req.params.id, (err) => {
       if (err) { return serverProblemLogger(req, res, err); }
       else res.status(200).json({ message: "Confession was deleted successfully!" });
     });
   }
+  else { return serverProblemLogger(req, res, "The user is not confession's author"); }
 });
 
 app.get("/api/confessions/:id", async (req, res) => {
@@ -131,18 +133,19 @@ app.get("/api/confessions/:id", async (req, res) => {
 });
 
 app.put("/api/confessions/:id", verifyToken, async (req, res) => {
-  const userId = res.locals.decoded.id;
+  const userId = res.locals.user.id;
   const confession = await getConfession(req.params.id);
-  if(userId == confession.author){
+  if(userId == confession.author.id){
     Confession.findByIdAndUpdate(req.params.id, req.body, (err) => {
       if (err) { return serverProblemLogger(req, res, err); }
       else res.status(200).json({ message: "Confession was updated successfully!" });
     });
   }
+  else { return serverProblemLogger(req, res, "The user is not confession's author"); }
 });
 
 app.put("/api/comments/:comment_id", verifyToken, (req, res) => {
-    const userId = res.locals.decoded.id;
+    const userId = res.locals.user.id;
     const commentId = req.params.comment_id;
     Comment.findById(commentId, (err, foundComment) => {
       if (err) { return serverProblemLogger(req, res, err); }
@@ -157,7 +160,7 @@ app.put("/api/comments/:comment_id", verifyToken, (req, res) => {
 );
 
 app.delete("/api/comments/:comment_id", verifyToken, (req, res) => {
-    const userId = res.locals.decoded.id;
+    const userId = res.locals.user.id;
     const commentId = req.params.comment_id;
     Comment.findById(commentId, (err, foundComment) => {
       if (err) { return serverProblemLogger(req, res, err); }
@@ -190,14 +193,13 @@ function verifyToken(req, res, next) {
   if (token) {
     jwt.verify(token, jwtOptions.secretOrKey, (err, decoded) => {
       if (err) { return serverProblemLogger(req, res, 'Invalid token'); }
-        const userId = decoded.id;
-        User.findById(userId, (err, user) => {
+        User.findById(decoded.id, (err, user) => {
           if (err) { return serverProblemLogger(req, res, err); }
             if (user.token_iat == decoded.iat){
-              res.locals.decoded = decoded;
+              res.locals.user = {id: decoded.id};
               next();
             }
-            else { return serverProblemLogger(req, res, 'Token is expired!'); }
+            else { return serverProblemLogger(req, res, 'Token is blacklisted!'); }
         });
     });
   }

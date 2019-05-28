@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute, Data, Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {ConfessionsService} from "../../confessions.service";
 import {Confession} from "../../models/confession.model";
-import {Subject, Subscription} from "rxjs";
+import {Subject} from "rxjs";
 import {concatMap, takeUntil} from 'rxjs/operators';
 import {UsersService} from "../../users.service";
 import {Location} from "@angular/common";
 import {ToastrService} from "ngx-toastr";
-import {CommentsService} from "../../comments.service";
 import {Shared} from "../../shared/shared";
 
 @Component({
@@ -19,7 +18,6 @@ export class ConfessionComponent implements OnInit {
   private ngUnsubscribe = new Subject();
 id: string;
 confession;
-like: string = 'Like';
 isConfessionOwner: boolean;
 isLoggedIn: boolean;
 
@@ -28,11 +26,11 @@ isLoggedIn: boolean;
               private confessionsService: ConfessionsService,
               private usersService: UsersService,
               private location: Location,
-              private toastrService: ToastrService,
-              private commentsService: CommentsService) { }
+              private toastrService: ToastrService) { }
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id');
+    //resolver data
     this.confession = this.route.snapshot.data['confession'];
     this.usersService.loggedInUser
       .pipe(
@@ -41,10 +39,10 @@ isLoggedIn: boolean;
       .subscribe(
         (user: any) => {
           this.isLoggedIn = (user != null);
-          this.isConfessionOwner = (user && user.id == this.confession.author);
+          this.isConfessionOwner = (user && user.id == this.confession.author.id);
         }
       );
-    this.commentsService.isCommentDeleted
+    this.confessionsService.isConfessionChanged
       .pipe(
         concatMap(
           () => { return this.confessionsService.getConfession(this.id); }
@@ -91,18 +89,6 @@ isLoggedIn: boolean;
 
   onComment(){
     this.router.navigate(['comments', 'new'], {relativeTo: this.route});
-  }
-
-  onLike(){
-    if(this.like==='Like'){
-      this.like = 'Unlike';
-      // this.confessionsService.addLike(this.id, this.confession.author);
-    }
-    else{
-      this.like = 'Like';
-      // this.confessionsService.removeLike(this.id, this.confession.author);
-    }
-
   }
 
 }

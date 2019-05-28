@@ -1,16 +1,21 @@
 <div class="row">
   <div class="col-xs-12 col-md-offset-2 col-sm-10 col-md-8" col-sm-offset-1 >
-    <form #f="ngForm" (ngSubmit)="onLogin(f)">
+    <form [formGroup]="form" (ngSubmit)="onLogin()">
       <div class="form-group">
         <label for="username">Username</label>
-        <input class="form-control" type="text" id="username" name="username" ngModel>
+        <input formControlName="username" class="form-control" type="text" id="username" name="username">
+        <div *ngIf="username.invalid && (username.touched || username.dirty)">
+          <div *ngIf="username.hasError('required')">Username should not be blank</div>
+        </div>
       </div>
       <div class="form-group">
         <label for="password">Password</label>
-        <input class="form-control" type="password" id="password" name="password" ngModel>
+        <input formControlName="password" class="form-control" type="password" id="password" name="password">
+        <div *ngIf="password.invalid && (password.touched || password.dirty)">
+          <div *ngIf="password.hasError('required')">Password should not be blank</div>
+        </div>
       </div>
-      <button class="btn btn-primary" type="submit" [disabled]="!f.valid">Login</button>
+      <button class="btn btn-primary" type="submit" [disabled]="form.invalid">Login</button>
     </form>
-
   </div>
 </div>
