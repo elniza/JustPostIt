@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {NgForm} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {User} from "../../models/user.model";
 import {PostsService} from "../posts.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Subject} from "rxjs";
 import {ToastrService} from "ngx-toastr";
-import {Location} from "@angular/common";
 import {takeUntil} from "rxjs/operators";
+import {FormValidator} from "../../auth/form.validator";
 
 @Component({
   selector: 'app-new-confession',
@@ -16,24 +16,37 @@ import {takeUntil} from "rxjs/operators";
 
 export class PostEditComponent implements OnInit {
   private ngUnsubscribe = new Subject();
-  title: string;
-  content: string;
   action: string = 'Create';
   id: string;
+  form: FormGroup;
+  title: FormControl;
+  content: FormControl;
 
   constructor(private route: ActivatedRoute,
               private postsService: PostsService,
               private router: Router,
-              private toastrService: ToastrService) { }
+              private toastrService: ToastrService,
+              private formBuilder: FormBuilder) { }
 
   ngOnInit() {
     const urlSplitted = this.route.routeConfig.path.split('/');
+    let formValidators = [];
+    let titleInitValue = "";
+    let contentInitValue = "";
     if(urlSplitted && urlSplitted[urlSplitted.length - 1] == 'edit'){
       this.action = 'Edit';
       this.id = this.route.snapshot.paramMap.get('id');
-      this.title = history.state.title;
-      this.content = history.state.content;
+      titleInitValue = history.state.title;
+      contentInitValue = history.state.content;
+      formValidators.push(FormValidator.initValueChanged(['title', 'content'], [titleInitValue, contentInitValue]));
     }
+    this.title = new FormControl(titleInitValue, [Validators.required]);
+    this.content = new FormControl(contentInitValue, [Validators.required]);
+    this.form = this.formBuilder.group({
+      title: this.title,
+      content: this.content
+    });
+    this.form.setValidators(formValidators);
   }
 
   ngOnDestroy(){
@@ -41,9 +54,8 @@ export class PostEditComponent implements OnInit {
     this.ngUnsubscribe.complete();
   }
 
-  postAction(postForm: NgForm){
-    const title =  postForm.controls['title'].value;
-    const content = postForm.controls['content'].value;
+  postAction(){
+    const { title, content } = this.form.value;
     if(this.action == 'Create'){
       this.postsService.createPost(title, content)
         .pipe(

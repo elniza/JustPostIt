@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import {NgForm} from "@angular/forms";
 import {CommentsService} from "../comments.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ToastrService} from "ngx-toastr";
 import {Subject} from "rxjs";
 import {takeUntil} from "rxjs/operators";
+import {FormValidator} from "../../auth/form.validator";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-comment-edit',
@@ -16,21 +17,32 @@ export class CommentEditComponent implements OnInit {
   action: string = 'Create';
   postId: string;
   commentId: string;
-  content: string;
+  form: FormGroup;
+  content: FormControl;
 
   constructor(private commentsService: CommentsService,
               private route: ActivatedRoute,
               private router: Router,
-              private toastrService: ToastrService) { }
+              private toastrService: ToastrService,
+              private formBuilder: FormBuilder) { }
 
   ngOnInit() {
     this.postId = this.route.snapshot.paramMap.get('id');
-    this.commentId = this.route.snapshot.paramMap.get('comment_id');
     const urlSplitted = this.route.routeConfig.path.split('/');
+    let formValidators = [];
+    let contentInitValue = "";
     if(urlSplitted && urlSplitted[urlSplitted.length - 1] == 'edit'){
       this.action = 'Edit';
-      this.content = history.state.content;
+      this.commentId = this.route.snapshot.paramMap.get('comment_id');
+      contentInitValue = history.state.content;
+      formValidators.push(FormValidator.initValueChanged(['content'], [contentInitValue]));
     }
+    this.content = new FormControl(contentInitValue, [Validators.required]);
+    this.form = this.formBuilder.group({
+      content: this.content
+    });
+    this.form.setValidators(formValidators);
+
   }
 
   ngOnDestroy(){
@@ -38,8 +50,8 @@ export class CommentEditComponent implements OnInit {
     this.ngUnsubscribe.complete();
   }
 
-  commentAction(commentForm: NgForm){
-    const content = commentForm.controls['content'].value;
+  commentAction(){
+    const content = this.form.value.content;
     if(this.action == 'Create'){
       this.commentsService.createComment(this.postId, content)
         .pipe(

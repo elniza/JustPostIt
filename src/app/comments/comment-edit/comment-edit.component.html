@@ -1,16 +1,18 @@
 <div class="row">
   <div class="col-xs-12 col-md-offset-2 col-sm-10 col-md-8" col-sm-offset-1>
-    <form #f="ngForm" (ngSubmit)="commentAction(f)">
+    <form [formGroup]="form" (ngSubmit)="commentAction()">
+      <div class="alert alert-danger" *ngIf="action=='Edit' && form.hasError('initValueChanged') &&  (content.touched || content.dirty)">
+        Content should be edited
+      </div>
       <div class="form-group">
         <label for="content">Content</label>
-        <textarea *ngIf="action=='Edit';else empty_content" [(ngModel)]="content" class="form-control" cols="60" rows="10" id="content" name="content">
+        <textarea formControlName="content" class="form-control" cols="60" rows="10" id="content" name="content">
         </textarea>
-        <ng-template #empty_content>
-          <textarea class="form-control" cols="60" rows="10" id="content" name="content" ngModel>
-        </textarea>
-        </ng-template>
+        <div class="alert alert-danger" *ngIf="content.hasError('required') && (content.touched || content.dirty)">
+          Content should not be blank
+        </div>
       </div>
-      <button class="btn btn-primary" type="submit" [disabled]="!f.valid">{{action}} Comment</button>
+      <button class="btn btn-primary" type="submit" [disabled]="form.invalid">{{action}} Comment</button>
     </form>
   </div>
 </div>

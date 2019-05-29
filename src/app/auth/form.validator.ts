@@ -1,11 +1,25 @@
 
-import { FormControl } from '@angular/forms';
+import {FormControl, FormGroup} from '@angular/forms';
 
 export interface ValidationResult {
   [key: string]: boolean;
 }
 
 export class FormValidator {
+
+  public static initValueChanged(controllerNames: string[], initValues: string[]) {
+    return (group: FormGroup): ValidationResult => {
+      for(let i = 0; i < controllerNames.length; i++){
+        const currentController = group.get(controllerNames[i]);
+        const currentInitValue = initValues[i];
+        if (currentController.value != currentInitValue) {
+          // return what´s not valid
+          return null;
+        }
+      }
+      return {initValueChanged: true};
+    }
+  }
 
   public static startsWithLetter(control: FormControl): ValidationResult {
     let startsWithLetter = /^[a-zA-Z]/.test(control.value);
