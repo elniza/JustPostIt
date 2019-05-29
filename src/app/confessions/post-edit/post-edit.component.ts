@@ -6,7 +6,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {Subject} from "rxjs";
 import {ToastrService} from "ngx-toastr";
 import {takeUntil} from "rxjs/operators";
-import {FormValidator} from "../../auth/form.validator";
+import {FormValidator} from "../../shared/form.validator";
 
 @Component({
   selector: 'app-new-confession',

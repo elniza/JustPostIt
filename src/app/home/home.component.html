@@ -1,15 +1,15 @@
 <div *ngIf="isLoggedIn">
-<a class="btn btn-primary" routerLink="posts/new">New Post</a>
-<hr>
+  <a class="btn btn-primary" routerLink="posts/new">New Post</a>
+  <hr>
 </div>
 <div class="container">
   <div *ngIf="posts.length != 0;else no_posts" class="row">
-      <app-minimized-post class="col-md-6"
-        *ngFor="let currentPost of posts;" [post]="currentPost"></app-minimized-post>
+    <app-minimized-post class="col-md-6"
+                        *ngFor="let currentPost of posts;" [post]="currentPost"></app-minimized-post>
   </div>
 </div>
-  <ng-template #no_posts>
-    <p>No posts have been added yet</p>
-  </ng-template>
+<ng-template #no_posts>
+  <p>No posts have been added yet</p>
+</ng-template>
 
 

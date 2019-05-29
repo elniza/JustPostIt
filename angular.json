@@ -27,7 +27,8 @@
               "node_modules/bootstrap/dist/css/bootstrap.css",
               "node_modules/ngx-toastr/toastr.css"
             ],
-            "scripts": []
+            "scripts": [
+            ]
           },
           "configurations": {
             "production": {

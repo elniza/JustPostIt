@@ -26,7 +26,6 @@ isLoggedIn: boolean;
               private toastrService: ToastrService) { }
 
   ngOnInit() {
-    console.log('in');
     this.id = this.route.snapshot.paramMap.get('id');
     //resolver data
     this.post = this.route.snapshot.data['post'];
@@ -51,9 +50,6 @@ isLoggedIn: boolean;
       .subscribe(
         (response: any) => {
           this.post = response;
-        },
-        (err) => {
-
         });
   }
 

@@ -5,14 +5,17 @@ import {catchError, map} from "rxjs/operators";
 import {BehaviorSubject} from "rxjs";
 import {Shared} from "../shared/shared";
 import {ToastrService} from "ngx-toastr";
+import {config} from "../../../config/frontend.config";
 
 @Injectable()
 export class AuthService{
   loggedInUser: BehaviorSubject<Object>;
+  url: string;
 
   constructor(private http: HttpClient,
               private toastrService: ToastrService){
     this.loggedInUser = new BehaviorSubject<Object>(null);
+    this.url = config.serverUrl;
   }
 
   getToken(): string {
@@ -38,7 +41,7 @@ export class AuthService{
       .set('username', username)
       .set('password', password);
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-    return this.http.post("http://localhost:4000/api/signUp", body.toString(), {headers: headers})
+    return this.http.post(`${this.url}/api/signUp`, body.toString(), {headers: headers})
       .pipe(
         catchError(Shared.handleError)
       );
@@ -49,7 +52,7 @@ export class AuthService{
       .set('username', username)
       .set('password', password);
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-    return this.http.post("http://localhost:4000/api/login", body.toString(), {headers: headers})
+    return this.http.post(`${this.url}/api/login`, body.toString(), {headers: headers})
       .pipe(
       map((response: any) => {
         this.loggedInUser.next({'username': `${response.username}`, 'id': `${response.user_id}`});

@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {CommentsService} from "../comments.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ToastrService} from "ngx-toastr";
 import {Subject} from "rxjs";
 import {takeUntil} from "rxjs/operators";
-import {FormValidator} from "../../auth/form.validator";
+import {FormValidator} from "../../shared/form.validator";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 
 @Component({
@@ -24,14 +24,15 @@ export class CommentEditComponent implements OnInit {
               private route: ActivatedRoute,
               private router: Router,
               private toastrService: ToastrService,
-              private formBuilder: FormBuilder) { }
+              private formBuilder: FormBuilder) {
+  }
 
   ngOnInit() {
     this.postId = this.route.snapshot.paramMap.get('id');
     const urlSplitted = this.route.routeConfig.path.split('/');
     let formValidators = [];
     let contentInitValue = "";
-    if(urlSplitted && urlSplitted[urlSplitted.length - 1] == 'edit'){
+    if (urlSplitted && urlSplitted[urlSplitted.length - 1] == 'edit') {
       this.action = 'Edit';
       this.commentId = this.route.snapshot.paramMap.get('comment_id');
       contentInitValue = history.state.content;
@@ -42,17 +43,16 @@ export class CommentEditComponent implements OnInit {
       content: this.content
     });
     this.form.setValidators(formValidators);
-
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
 
-  commentAction(){
+  commentAction() {
     const content = this.form.value.content;
-    if(this.action == 'Create'){
+    if (this.action == 'Create') {
       this.commentsService.createComment(this.postId, content)
         .pipe(
           takeUntil(this.ngUnsubscribe)
@@ -67,7 +67,7 @@ export class CommentEditComponent implements OnInit {
           }
         );
     }
-    else if(this.action == 'Edit'){
+    else if (this.action == 'Edit') {
       this.commentsService.editComment(this.commentId, content)
         .pipe(
           takeUntil(this.ngUnsubscribe)

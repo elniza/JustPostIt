@@ -6,14 +6,17 @@ import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {catchError} from "rxjs/operators";
 import {Shared} from "../shared/shared";
 import {ReplaySubject} from "rxjs";
+import {config} from "../../../config/frontend.config";
 
 @Injectable()
 export class PostsService{
   isPostChanged: ReplaySubject<boolean>;
+  url: string;
 
   constructor(private authService: AuthService,
               private http: HttpClient){
     this.isPostChanged = new ReplaySubject<boolean>(1);
+    this.url = config.serverUrl;
   }
 
   createPost(title: string, content: string){
@@ -23,21 +26,21 @@ export class PostsService{
     const headers = new HttpHeaders()
       .set('Content-Type', 'application/x-www-form-urlencoded')
        .set('Authorization', localStorage.getItem('jwt'));
-    return this.http.post("http://localhost:4000/api/posts", body.toString(), {headers: headers})
+    return this.http.post(`${this.url}/api/posts`, body.toString(), {headers: headers})
       .pipe(
       catchError(Shared.handleError)
     );
   }
 
   getPosts(){
-     return this.http.get("http://localhost:4000/api/posts")
+     return this.http.get(`${this.url}/api/posts`)
        .pipe(
          catchError(Shared.handleError)
        );
   }
 
   getPost(id: string){
-    return this.http.get("http://localhost:4000/api/posts/" + id)
+    return this.http.get(`${this.url}/api/posts/${id}`)
       .pipe(
         catchError(Shared.handleError)
       );
@@ -47,7 +50,7 @@ export class PostsService{
     const headers = new HttpHeaders()
       .set('Content-Type', 'application/x-www-form-urlencoded')
       .set('Authorization', localStorage.getItem('jwt'));
-    return this.http.delete("http://localhost:4000/api/posts/" + id, {headers: headers})
+    return this.http.delete(`${this.url}/api/posts/${id}`, {headers: headers})
       .pipe(
         catchError(Shared.handleError)
       );
@@ -60,7 +63,7 @@ export class PostsService{
     const headers = new HttpHeaders()
       .set('Content-Type', 'application/x-www-form-urlencoded')
       .set('Authorization', localStorage.getItem('jwt'));
-    return this.http.put("http://localhost:4000/api/posts/" + id, body.toString(), {headers: headers})
+    return this.http.put(`${this.url}/api/posts/${id}`, body.toString(), {headers: headers})
       .pipe(
         catchError(Shared.handleError)
       );
