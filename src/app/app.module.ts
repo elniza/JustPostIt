@@ -20,6 +20,7 @@ import {CommentEditComponent} from './comments/comment-edit/comment-edit.compone
 import {CommentsService} from "./comments/comments.service";
 import {CommentComponent} from './comments/comment/comment.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { LandingComponent } from './landing/landing.component';
 
 
 @NgModule({
@@ -35,10 +36,11 @@ import { NotFoundComponent } from './not-found/not-found.component';
     PostEditComponent,
     CommentEditComponent,
     CommentComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    LandingComponent
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),
     AppRoutingModule,
     ReactiveFormsModule,
     FormsModule,
