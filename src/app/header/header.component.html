@@ -1,6 +1,7 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
   <a class="navbar-brand" routerLink="/">JustPostIt</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
@@ -12,22 +13,22 @@
       </li>
     </ul>
 
-      <ul *ngIf="!loggedInUser" class="nav navbar-nav navbar-right">
-        <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" routerLink="/register">Sign Up</a>
-        </li>
-        <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" routerLink="/login">Login</a>
-        </li>
-      </ul>
-    <ul *ngIf="loggedInUser"  class="nav navbar-nav navbar-right">
-      <li class="nav-item">
-        <a class="nav-link">Logged in as {{loggedInUser}}</a>
+    <ul *ngIf="!loggedInUser" class="nav navbar-nav navbar-right">
+      <li class="nav-item" routerLinkActive="active">
+        <a class="nav-link" routerLink="/register">Sign Up</a>
       </li>
-        <li class="nav-item">
-          <a (click)="onLogout()" class="nav-link">Logout</a>
-        </li>
-      </ul>
+      <li class="nav-item" routerLinkActive="active">
+        <a class="nav-link" routerLink="/login">Login</a>
+      </li>
+    </ul>
+    <ul *ngIf="loggedInUser" class="nav navbar-nav navbar-right">
+      <li class="nav-item">
+        <span class="navbar-text text-white">Logged in as '{{loggedInUser}}'</span>
+      </li>
+      <li class="nav-item">
+        <button class="btn btn-outline-success bg-white text-dark ml-3" (click)="onLogout()">Logout</button>
+      </li>
+    </ul>
 
 
   </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {PostsService} from "../confessions/posts.service";
 import {AuthService} from "../auth/auth.service";
 import {Subject} from "rxjs";
@@ -20,9 +20,11 @@ export class HomeComponent implements OnInit {
   constructor(private postsService: PostsService,
               private authService: AuthService,
               private route: ActivatedRoute,
-              private toastrService: ToastrService) { }
+              private toastrService: ToastrService) {
+  }
 
   ngOnInit() {
+    //resolver data
     this.posts = this.route.snapshot.data['posts'];
     this.authService.loggedInUser
       .pipe(
@@ -30,15 +32,16 @@ export class HomeComponent implements OnInit {
       )
       .subscribe(
         (user: object) => {
-        this.isLoggedIn = (user != null);
-      });
+          this.isLoggedIn = (user != null);
+        });
 
   }
+
   ngAfterViewInit() {
     Shared.showFlashMessageIfNeeded(this.toastrService);
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }

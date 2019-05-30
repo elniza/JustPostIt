@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../auth.service";
 import {Router} from "@angular/router";
@@ -22,7 +22,8 @@ export class RegisterComponent implements OnInit {
   constructor(private authService: AuthService,
               private toastrService: ToastrService,
               private router: Router,
-              private formBuilder: FormBuilder) {}
+              private formBuilder: FormBuilder) {
+  }
 
   ngOnInit() {
     this.username = new FormControl("", [
@@ -47,13 +48,13 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
 
-  onSignUp(){
-   const { username, password } = this.form.value;
+  onSignUp() {
+    const {username, password} = this.form.value;
     this.authService.signUp(username, password)
       .pipe(
         takeUntil(this.ngUnsubscribe)
@@ -65,7 +66,7 @@ export class RegisterComponent implements OnInit {
         (err) => {
           this.toastrService.error(err.error, 'Sign up error');
         }
-    );
+      );
 
   }
 

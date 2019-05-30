@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../auth.service";
 import {ToastrService} from "ngx-toastr";
@@ -20,7 +20,8 @@ export class LoginComponent implements OnInit {
   constructor(private authService: AuthService,
               private toastrService: ToastrService,
               private router: Router,
-              private formBuilder: FormBuilder) { }
+              private formBuilder: FormBuilder) {
+  }
 
   ngOnInit() {
     //we did all the checks in register component
@@ -32,25 +33,25 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
 
-   onLogin(){
-     const { username, password } = this.form.value;
-     this.authService.login(username, password)
-       .pipe(
-         takeUntil(this.ngUnsubscribe)
-       )
-       .subscribe(
-       (response: any) => {
-         this.router.navigate(['/'], {state: {toastrMessage: response.message, toastrTitle: 'Logged in'}});
-       },
-       (err) => {
-         this.toastrService.error(err.error, 'Login error');
-       }
-     );
-   }
+  onLogin() {
+    const {username, password} = this.form.value;
+    this.authService.login(username, password)
+      .pipe(
+        takeUntil(this.ngUnsubscribe)
+      )
+      .subscribe(
+        (response: any) => {
+          this.router.navigate(['/'], {state: {toastrMessage: response.message, toastrTitle: 'Logged in'}});
+        },
+        (err) => {
+          this.toastrService.error(err.error, 'Login error');
+        }
+      );
+  }
 
 }

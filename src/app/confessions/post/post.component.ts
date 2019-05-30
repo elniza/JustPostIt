@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {PostsService} from "../posts.service";
 import {Subject} from "rxjs";
@@ -14,22 +14,22 @@ import {Shared} from "../../shared/shared";
 })
 export class PostComponent implements OnInit {
   private ngUnsubscribe = new Subject();
-id: string;
-post;
-isPostOwner: boolean;
-isLoggedIn: boolean;
+  id: string;
+  post;
+  isPostOwner: boolean;
+  isLoggedIn: boolean;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
               private postsService: PostsService,
               private authService: AuthService,
-              private toastrService: ToastrService) { }
+              private toastrService: ToastrService) {
+  }
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id');
     //resolver data
     this.post = this.route.snapshot.data['post'];
-    console.log(this.post);
     this.authService.loggedInUser
       .pipe(
         takeUntil(this.ngUnsubscribe)
@@ -40,11 +40,14 @@ isLoggedIn: boolean;
           this.isPostOwner = (user && user.id == this.post.author.id);
         }
       );
+    //if post changed (like comment was deleted)
     this.postsService.isPostChanged
       .pipe(
         concatMap(
-          () => { return this.postsService.getPost(this.id); }
-          ),
+          () => {
+            return this.postsService.getPost(this.id);
+          }
+        ),
         takeUntil(this.ngUnsubscribe)
       )
       .subscribe(
@@ -57,16 +60,17 @@ isLoggedIn: boolean;
     Shared.showFlashMessageIfNeeded(this.toastrService);
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
 
-  onEditPost(){
+  onEditPost() {
     this.router.navigate(['edit'],
       {state: {title: this.post.title, content: this.post.content}, relativeTo: this.route});
   }
-  onDeletePost(){
+
+  onDeletePost() {
     this.postsService.deletePost(this.id)
       .pipe(
         takeUntil(this.ngUnsubscribe)
@@ -82,7 +86,7 @@ isLoggedIn: boolean;
       );
   }
 
-  onComment(){
+  onComment() {
     this.router.navigate(['comments', 'new'], {relativeTo: this.route});
   }
 

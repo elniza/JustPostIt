@@ -26,14 +26,16 @@ export class PostEditComponent implements OnInit {
               private postsService: PostsService,
               private router: Router,
               private toastrService: ToastrService,
-              private formBuilder: FormBuilder) { }
+              private formBuilder: FormBuilder) {
+  }
 
   ngOnInit() {
     const urlSplitted = this.route.routeConfig.path.split('/');
     let formValidators = [];
     let titleInitValue = "";
     let contentInitValue = "";
-    if(urlSplitted && urlSplitted[urlSplitted.length - 1] == 'edit'){
+    if (urlSplitted && urlSplitted[urlSplitted.length - 1] == 'edit') {
+      //in edit page
       this.action = 'Edit';
       this.id = this.route.snapshot.paramMap.get('id');
       titleInitValue = history.state.title;
@@ -49,29 +51,29 @@ export class PostEditComponent implements OnInit {
     this.form.setValidators(formValidators);
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
 
-  postAction(){
-    const { title, content } = this.form.value;
-    if(this.action == 'Create'){
+  postAction() {
+    const {title, content} = this.form.value;
+    if (this.action == 'Create') {
       this.postsService.createPost(title, content)
         .pipe(
           takeUntil(this.ngUnsubscribe)
         )
         .subscribe(
           (response: any) => {
-           this.router.navigate(['/'],
-             {state: {toastrMessage: response.message, toastrTitle: 'Add post'}});
+            this.router.navigate(['/'],
+              {state: {toastrMessage: response.message, toastrTitle: 'Add post'}});
           },
           (err) => {
             this.toastrService.error(err.error, 'Add post error');
           }
         );
     }
-    else if(this.action == 'Edit'){
+    else if (this.action == 'Edit') {
       this.postsService.editPost(this.id, title, content)
         .pipe(
           takeUntil(this.ngUnsubscribe)
@@ -86,6 +88,6 @@ export class PostEditComponent implements OnInit {
           }
         );
     }
-}
+  }
 
 }

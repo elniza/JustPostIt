@@ -6,14 +6,14 @@ import {Shared} from "../shared/shared";
 import {config} from "../../../config/frontend.config";
 
 @Injectable()
-export class CommentsService{
+export class CommentsService {
   url: string;
 
-  constructor(private http: HttpClient){
+  constructor(private http: HttpClient) {
     this.url = config.serverUrl;
   }
 
-  createComment(postId: string, content: string){
+  createComment(postId: string, content: string) {
     const body = new HttpParams()
       .set('content', content);
     const headers = new HttpHeaders()
@@ -25,7 +25,7 @@ export class CommentsService{
       );
   }
 
-  editComment(comment_id: string, content: string){
+  editComment(comment_id: string, content: string) {
     const body = new HttpParams()
       .set('content', content);
     const headers = new HttpHeaders()
@@ -38,11 +38,11 @@ export class CommentsService{
       );
   }
 
-  deleteComment(comment_id: string){
+  deleteComment(comment_id: string) {
     const headers = new HttpHeaders()
       .set('Content-Type', 'application/x-www-form-urlencoded')
       .set('Authorization', localStorage.getItem('jwt'));
-    return this.http.delete(`${this.url}/api/comments/${comment_id}`,{headers: headers})
+    return this.http.delete(`${this.url}/api/comments/${comment_id}`, {headers: headers})
       .pipe(
         catchError(Shared.handleError)
       );

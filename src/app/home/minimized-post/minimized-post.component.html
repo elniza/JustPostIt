@@ -1,17 +1,13 @@
-
-    <div class="img-thumbnail">
-      <h1>{{post.author.username}}</h1>
-      <h3>{{post.title}}</h3>
-      <p>{{post.date}}</p>
-
-      <p>{{post.content.substr(0, 200)}} {{post.content.length > 200 ? '[...]' : ''}}</p>
-      <div>
-        <a class="btn btn-info" [routerLink]="['posts', post._id]">Read More</a>
-        <div class="float-right">
-          <span>{{post.comments.length}} Comments</span>
-        </div>
-
-      </div>
+<div class="img-thumbnail h-100 w-100">
+  <h3>{{post.title.length > 50 ? '' + post.title.substr(0,50) + ' [...]' : post.title}}</h3>
+  <p>{{post.content.length > 300 ? '' + post.content.substr(0,300) + ' [...]' : post.content}}</p>
+  <div>
+    <a class="btn btn-info mb-2" [routerLink]="['posts', post._id]">Read More</a>
+    <div>
+      <small>Posted by {{post.author.username}} at {{post.date | date: 'dd/MM/yyyy hh:mm'}}</small>
+      <small class="float-right">{{post.comments.length}} Comments</small>
     </div>
+  </div>
+</div>
 
 

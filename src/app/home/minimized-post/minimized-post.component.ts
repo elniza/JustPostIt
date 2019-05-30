@@ -6,8 +6,10 @@ import {Component, Input, OnInit} from '@angular/core';
   styleUrls: ['./minimized-post.component.css']
 })
 export class MinimizedPostComponent implements OnInit {
-  @Input() post: JSON;
-  constructor() { }
+  @Input() post;
+
+  constructor() {
+  }
 
   ngOnInit() {
   }

@@ -4,22 +4,24 @@ import {AuthService} from "./auth/auth.service";
 import {ToastrService} from "ngx-toastr";
 
 @Injectable()
-export class RoutesService implements CanActivate{
+export class RoutesService implements CanActivate {
 
   constructor(private authService: AuthService,
               private router: Router,
-              private toastrService: ToastrService) {}
+              private toastrService: ToastrService) {
+  }
 
   ngOnInit() {
   }
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot){
-    if(!this.authService.getToken()){
+  //checks user is login to the system
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    if (!this.authService.getToken()) {
       //the real token check will be in the backend
       this.router.navigate(['login']);
       this.toastrService.error("Don't be a smartass, you aren't logged in", 'Unauthorized');
       return false;
     }
-     return true;
+    return true;
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../auth/auth.service";
 
 @Component({
@@ -9,18 +9,19 @@ import {AuthService} from "../auth/auth.service";
 export class HeaderComponent implements OnInit {
   loggedInUser: string;
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService) {
+  }
 
   ngOnInit() {
     this.authService.loggedInUser
       .subscribe(
         (user: any) => {
-            this.loggedInUser = (user ? user.username : null);
+          this.loggedInUser = (user ? user.username : null);
         }
       );
   }
 
-  onLogout(){
+  onLogout() {
     const user = this.loggedInUser;
     const logoutMessage = "User '" + user + "' logged out successfully!";
     this.authService.logout(logoutMessage);

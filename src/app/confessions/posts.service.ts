@@ -9,44 +9,44 @@ import {ReplaySubject} from "rxjs";
 import {config} from "../../../config/frontend.config";
 
 @Injectable()
-export class PostsService{
+export class PostsService {
   isPostChanged: ReplaySubject<boolean>;
   url: string;
 
   constructor(private authService: AuthService,
-              private http: HttpClient){
+              private http: HttpClient) {
     this.isPostChanged = new ReplaySubject<boolean>(1);
     this.url = config.serverUrl;
   }
 
-  createPost(title: string, content: string){
+  createPost(title: string, content: string) {
     const body = new HttpParams()
       .set('title', title)
       .set('content', content);
     const headers = new HttpHeaders()
       .set('Content-Type', 'application/x-www-form-urlencoded')
-       .set('Authorization', localStorage.getItem('jwt'));
+      .set('Authorization', localStorage.getItem('jwt'));
     return this.http.post(`${this.url}/api/posts`, body.toString(), {headers: headers})
       .pipe(
-      catchError(Shared.handleError)
-    );
+        catchError(Shared.handleError)
+      );
   }
 
-  getPosts(){
-     return this.http.get(`${this.url}/api/posts`)
-       .pipe(
-         catchError(Shared.handleError)
-       );
+  getPosts() {
+    return this.http.get(`${this.url}/api/posts`)
+      .pipe(
+        catchError(Shared.handleError)
+      );
   }
 
-  getPost(id: string){
+  getPost(id: string) {
     return this.http.get(`${this.url}/api/posts/${id}`)
       .pipe(
         catchError(Shared.handleError)
       );
   }
 
-  deletePost(id: string){
+  deletePost(id: string) {
     const headers = new HttpHeaders()
       .set('Content-Type', 'application/x-www-form-urlencoded')
       .set('Authorization', localStorage.getItem('jwt'));
@@ -56,7 +56,7 @@ export class PostsService{
       );
   }
 
-  editPost(id: string, title: string, content: string){
+  editPost(id: string, title: string, content: string) {
     const body = new HttpParams()
       .set('title', title)
       .set('content', content);

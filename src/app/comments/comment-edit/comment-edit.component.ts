@@ -33,6 +33,7 @@ export class CommentEditComponent implements OnInit {
     let formValidators = [];
     let contentInitValue = "";
     if (urlSplitted && urlSplitted[urlSplitted.length - 1] == 'edit') {
+      //in edit page
       this.action = 'Edit';
       this.commentId = this.route.snapshot.paramMap.get('comment_id');
       contentInitValue = history.state.content;

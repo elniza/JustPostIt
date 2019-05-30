@@ -8,12 +8,12 @@ import {ToastrService} from "ngx-toastr";
 import {config} from "../../../config/frontend.config";
 
 @Injectable()
-export class AuthService{
+export class AuthService {
   loggedInUser: BehaviorSubject<Object>;
   url: string;
 
   constructor(private http: HttpClient,
-              private toastrService: ToastrService){
+              private toastrService: ToastrService) {
     this.loggedInUser = new BehaviorSubject<Object>(null);
     this.url = config.serverUrl;
   }
@@ -36,7 +36,7 @@ export class AuthService{
     this.toastrService.success(logoutMessage, "Logged out");
   }
 
-  signUp(username: string, password: string){
+  signUp(username: string, password: string) {
     const body = new HttpParams()
       .set('username', username)
       .set('password', password);
@@ -47,18 +47,18 @@ export class AuthService{
       );
   }
 
-  login(username: string, password: string){
+  login(username: string, password: string) {
     const body = new HttpParams()
       .set('username', username)
       .set('password', password);
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     return this.http.post(`${this.url}/api/login`, body.toString(), {headers: headers})
       .pipe(
-      map((response: any) => {
-        this.loggedInUser.next({'username': `${response.username}`, 'id': `${response.user_id}`});
-        this.saveToken(response.token);
-        return response;
-      }),
+        map((response: any) => {
+          this.loggedInUser.next({'username': `${response.username}`, 'id': `${response.user_id}`});
+          this.saveToken(response.token);
+          return response;
+        }),
         catchError(Shared.handleError));
   }
 }

@@ -1,9 +1,10 @@
-<div>
-<h6>{{comment.author.username}}</h6>
-<h5>{{comment.date}}</h5>
-<p>{{comment.content}}</p>
-</div>
-<div *ngIf="isCommentOwner">
-  <a (click)="onEditComment()" class="btn btn-primary mr-1">Edit Comment</a>
-  <a (click)="onDeleteComment()" class="btn btn-primary mr-3">Delete Comment</a>
+<div class="img-thumbnail mb-3">
+  <div>
+    <p><strong>{{comment.author.username}}:</strong> {{comment.content}}</p>
+    <small>Commented at {{comment.date | date: 'dd/MM/yyyy hh:mm'}}</small>
+  </div>
+  <div class="mt-2" *ngIf="isCommentOwner">
+    <a (click)="onEditComment()" class="btn btn-primary mr-1 text-white">Edit Comment</a>
+    <a (click)="onDeleteComment()" class="btn btn-primary mr-3 text-white">Delete Comment</a>
+  </div>
 </div>

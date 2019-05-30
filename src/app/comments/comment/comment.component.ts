@@ -23,7 +23,8 @@ export class CommentComponent implements OnInit {
               private authService: AuthService,
               private commentsService: CommentsService,
               private toastrService: ToastrService,
-              private postsService: PostsService) { }
+              private postsService: PostsService) {
+  }
 
   ngOnInit() {
     this.commentId = this.comment._id;
@@ -38,22 +39,26 @@ export class CommentComponent implements OnInit {
       )
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
 
-  onEditComment(){
-    this.router.navigate(['comments', '' + this.commentId, 'edit'], {state: {content: this.comment.content}, relativeTo: this.route});
+  onEditComment() {
+    this.router.navigate(['comments', '' + this.commentId, 'edit'], {
+      state: {content: this.comment.content},
+      relativeTo: this.route
+    });
   }
 
-  onDeleteComment(){
-   this.commentsService.deleteComment(this.commentId)
-     .pipe(
-       takeUntil(this.ngUnsubscribe)
-     )
+  onDeleteComment() {
+    this.commentsService.deleteComment(this.commentId)
+      .pipe(
+        takeUntil(this.ngUnsubscribe)
+      )
       .subscribe(
         (response: any) => {
+          //refresh post object
           this.postsService.isPostChanged.next(true);
           this.toastrService.success(response.message, 'Delete comment');
         },

@@ -1,17 +1,19 @@
-
 <div *ngIf="post">
-  <h1>{{post.author.username}}</h1>
   <h3>{{post.title}}</h3>
-  <p>{{post.date}}</p>
   <p>{{post.content}}</p>
+  <div>
+    <small>Posted by {{post.author.username}} at {{post.date | date: 'dd/MM/yyyy hh:mm'}}</small>
+  </div>
+  <div class="mt-2">
   <div class="float-left" *ngIf="isPostOwner">
-  <a (click)="onEditPost()" class="btn btn-primary mr-1">Edit Post</a>
-  <a (click)="onDeletePost()" class="btn btn-primary mr-3">Delete Post</a>
+    <a (click)="onEditPost()" class="btn btn-primary mr-1">Edit Post</a>
+    <a (click)="onDeletePost()" class="btn btn-primary mr-3">Delete Post</a>
   </div>
   <div *ngIf="isLoggedIn">
-  <a (click)="onComment()" class="btn btn-success">Add Comment</a>
+    <a (click)="onComment()" class="btn btn-success">Add Comment</a>
   </div>
-<hr>
+  </div>
+  <hr>
   <app-comment *ngFor="let comment of post.comments;" [comment]="comment"></app-comment>
 </div>
 
