@@ -2,7 +2,7 @@
   <h3>{{post.title.length > 50 ? '' + post.title.substr(0,50) + ' [...]' : post.title}}</h3>
   <p>{{post.content.length > 300 ? '' + post.content.substr(0,300) + ' [...]' : post.content}}</p>
   <div>
-    <a class="btn btn-info mb-2" [routerLink]="['posts', post._id]">Read More</a>
+    <a class="btn btn-info mb-2" [routerLink]="post._id">Read More</a>
     <div>
       <small>Posted by {{post.author.username}} at {{post.date | date: 'dd/MM/yyyy hh:mm'}}</small>
       <small class="float-right">{{post.comments.length}} Comments</small>

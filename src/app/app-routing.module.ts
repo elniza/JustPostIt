@@ -11,10 +11,9 @@ import {CommentEditComponent} from "./comments/comment-edit/comment-edit.compone
 import {PostResolverService} from "./confessions/post/post-resolver.service";
 import {PostsResolverService} from "./confessions/posts-resolver.service";
 import {NotFoundComponent} from "./not-found/not-found.component";
-import {LandingComponent} from "./landing/landing.component";
 
 const appRoutes: Routes = [
-  {path: '', component: LandingComponent},
+  {path: '', redirectTo: 'posts', pathMatch: 'full'},
   {path: 'about', component: AboutComponent},
   {path: 'register', component: RegisterComponent},
   {path: 'login', component: LoginComponent},

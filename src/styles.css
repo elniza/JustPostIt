@@ -1,16 +1,4 @@
 /* You can add global styles to this file, and also import other style files */
-/*body {*/
-  /*padding-top: 70px;*/
-/*}*/
-
-/*html{*/
-  /*background-image: url(assets/header.png);*/
-  /*background-repeat: no-repeat;*/
-  /*background-position: center center;*/
-  /*background-attachment: fixed;*/
-  /*position: relative;*/
-  /*-webkit-background-size:cover;*/
-  /*-moz-background-size:cover;*/
-  /*-o-background-size:cover;*/
-  /*background-size:cover;*/
-/*}*/
+body {
+  padding-top: 70px;
+}
