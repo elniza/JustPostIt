@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {PostsService} from "../confessions/posts.service";
+import {PostsService} from "../posts/posts.service";
 import {AuthService} from "../auth/auth.service";
 import {Subject} from "rxjs";
 import {takeUntil} from "rxjs/operators";

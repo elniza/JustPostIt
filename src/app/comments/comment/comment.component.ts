@@ -5,7 +5,7 @@ import {CommentsService} from "../comments.service";
 import {ToastrService} from "ngx-toastr";
 import {Subject} from "rxjs";
 import {takeUntil} from "rxjs/operators";
-import {PostsService} from "../../confessions/posts.service";
+import {PostsService} from "../../posts/posts.service";
 
 @Component({
   selector: 'app-comment',

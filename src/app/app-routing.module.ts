@@ -4,12 +4,12 @@ import {AboutComponent} from "./header/about/about.component";
 import {RegisterComponent} from "./auth/register/register.component";
 import {LoginComponent} from "./auth/login/login.component";
 import {HomeComponent} from "./home/home.component";
-import {PostComponent} from "./confessions/post/post.component";
-import {PostEditComponent} from "./confessions/post-edit/post-edit.component";
+import {PostComponent} from "./posts/post/post.component";
+import {PostEditComponent} from "./posts/post-edit/post-edit.component";
 import {RoutesService} from "./routes.service";
 import {CommentEditComponent} from "./comments/comment-edit/comment-edit.component";
-import {PostResolverService} from "./confessions/post/post-resolver.service";
-import {PostsResolverService} from "./confessions/posts-resolver.service";
+import {PostResolverService} from "./posts/post/post-resolver.service";
+import {PostsResolverService} from "./posts/posts-resolver.service";
 import {NotFoundComponent} from "./not-found/not-found.component";
 
 const appRoutes: Routes = [
