@@ -28,7 +28,7 @@ app.use("/api", commentsRoutes);
 app.use('/*',function(req, res) {
   res.status(404).json('Not Found');
 });
-const serverPort = process.env.PORT || 8080;
+const serverPort = 8080;
 app.listen(serverPort, function () {
   console.log('Server listening on port ' + serverPort);
 });

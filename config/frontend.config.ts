@@ -1,4 +1,4 @@
 export const config = {
   //backend server url
-  serverUrl: 'http://localhost:4000'
+  serverUrl: 'http://localhost:8080'
 };
