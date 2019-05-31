@@ -4,14 +4,11 @@ const express = require('express'),
   mongoose = require('mongoose'),
   cors = require('cors');
 
-const Config = require('./config/backendConfig');
-
 const authRoutes = require("./routes/auth"),
       postsRoutes = require("./routes/posts"),
       commentsRoutes = require("./routes/comments");
 
-const db = `${Config.DATABASE.HOST}:${Config.DATABASE.PORT}/${Config.DATABASE.DB}`;
-mongoose.connect(db, {
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/test", {
   useNewUrlParser: true,
   useFindAndModify: false
 }).then(() => console.log("MongoDB successfully connected"))
@@ -32,7 +29,6 @@ app.use('/*',function(req, res) {
   res.status(404).json('Not Found');
 });
 
-const serverPort = Config.SERVER.PORT;
-app.listen(serverPort, function () {
+app.listen(process.env.PORT || 8080, function () {
   console.log('Server listening on port ' + serverPort);
 });
