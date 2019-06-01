@@ -9,7 +9,8 @@
   },
   "files": [
     "test.ts",
-    "polyfills.ts"
+    "polyfills.ts",
+    "src/app/posts/posts.module.ts"
   ],
   "include": [
     "**/*.spec.ts",

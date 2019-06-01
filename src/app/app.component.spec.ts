@@ -1,5 +1,11 @@
 import {TestBed, async} from '@angular/core/testing';
 import {AppComponent} from './app.component';
+import {CoreModule} from "./core/core.module";
+import {BrowserModule} from "@angular/platform-browser";
+import {AppRoutingModule} from "./app-routing.module";
+import {AuthModule} from "./auth/auth.module";
+import {HttpClientModule} from "@angular/common/http";
+import {ToastNoAnimationModule} from "ngx-toastr";
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -7,6 +13,18 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent
       ],
+      imports: [
+        BrowserModule,
+        AppRoutingModule,
+        AuthModule,
+        CoreModule,
+        HttpClientModule,
+        ToastNoAnimationModule.forRoot(
+          {
+            preventDuplicates: true,
+            closeButton: true
+          })
+      ]
     }).compileComponents();
   }));
 
@@ -16,16 +34,4 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'justpostit'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('justpostit');
-  });
-
-  it('should render title in a h1 tag', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to justpostit!');
-  });
 });
