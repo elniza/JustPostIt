@@ -4,7 +4,7 @@ import {AuthService} from "./auth/auth.service";
 import {ToastrService} from "ngx-toastr";
 
 @Injectable()
-export class RoutesService implements CanActivate {
+export class RoutesGuardService implements CanActivate {
 
   constructor(private authService: AuthService,
               private router: Router,

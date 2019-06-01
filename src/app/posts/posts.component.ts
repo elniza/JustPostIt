@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {PostsService} from "../posts/posts.service";
+import {PostsService} from "./posts.service";
 import {AuthService} from "../auth/auth.service";
 import {Subject} from "rxjs";
 import {takeUntil} from "rxjs/operators";
@@ -9,10 +9,10 @@ import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  templateUrl: './posts.component.html',
+  styleUrls: ['./posts.component.css']
 })
-export class HomeComponent implements OnInit {
+export class PostsComponent implements OnInit {
   private ngUnsubscribe = new Subject();
   posts;
   isLoggedIn: boolean;
