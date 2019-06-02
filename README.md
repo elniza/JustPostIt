@@ -2,9 +2,15 @@
 
 This project is a comments system which logged-in users can write posts and others can comment.
 
+## Technologies and main dependencies
+
+* MEAN stack (MongoDB, Express.js, Angular, Node.js)
+* 'jsonwebtoken' - Authorization token
+* 'bcryptjs' - Password hashing
+
 ## Prerequisites
 
-This project is using the MEAN stack technologies (MongoDB, Express.js, Angular, Node.js), so you need to install first:
+You need to install first:
 * Node.js and npm - https://nodejs.org/en/ (preferable 8.11.3)
 * Angular - run this command:
 ```
