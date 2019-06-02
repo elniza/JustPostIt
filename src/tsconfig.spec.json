@@ -10,7 +10,7 @@
   "files": [
     "test.ts",
     "polyfills.ts",
-    "src/app/posts/posts.module.ts"
+    "./app/posts/posts.module.ts"
   ],
   "include": [
     "**/*.spec.ts",
