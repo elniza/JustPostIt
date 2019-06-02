@@ -17,13 +17,13 @@ You can download the zip file from this repository, or otherwise download & inst
 ```
 git clone https://github.com/elniza/JustPostIt.git justPostIt  
 cd justPostIt
-``` - r
+```
 
 ## Run
 
 run these commands:
-`npm install` - installs the dependencies.
-`node app.js` - runs the Backend server.
+```npm install``` - installs the dependencies.
+```node app.js``` - runs the Backend server.
 
 Open another terminal and run:
 `npm start` or `ng serve` - runs the dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
