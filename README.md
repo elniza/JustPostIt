@@ -5,8 +5,8 @@ This project is a comments system which logged-in users can write posts and othe
 ## Technologies and main dependencies
 
 * MEAN stack (MongoDB, Express.js, Angular, Node.js)
-* 'jsonwebtoken' - Authorization token
-* 'bcryptjs' - Password hashing
+* jsonwebtoken - Authorization token
+* bcryptjs - Password hashing
 
 ## Prerequisites
 
@@ -28,8 +28,14 @@ cd justPostIt
 ## Run
 
 run these commands:
-```npm install``` - installs the dependencies.
-```node app.js``` - runs the Backend server.
+```
+npm install
+```
+it will install the dependencies in package.json.
+```
+node app.js
+```
+it will run the Backend server.
 
 Open another terminal and run:
 `npm start` or `ng serve` - runs the dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
