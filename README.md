@@ -17,7 +17,7 @@ You can download the zip file from this repository, or otherwise download & inst
 ```
 git clone https://github.com/elniza/JustPostIt.git justPostIt  
 cd justPostIt
-```
+``` - r
 
 ## Run
 
