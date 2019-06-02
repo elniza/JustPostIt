@@ -19,8 +19,13 @@ git clone https://github.com/elniza/JustPostIt.git justPostIt
 cd justPostIt
 ```
 
-## Development server
+## Run
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+run these commands:
+`npm install` - installs the dependencies.
+`node app.js` - runs the Backend server.
+
+Open another terminal and run:
+`npm start` or `ng serve` - runs the dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
 
 
