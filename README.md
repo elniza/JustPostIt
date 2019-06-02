@@ -4,7 +4,7 @@ This project is a comments system which logged-in users can write posts and othe
 
 ## Prerequisites
 
-This project is using the MEAN stack technologies, so you need to instal first:
+This project is using the MEAN stack technologies, so you need to install first:
 1. Node.js and npm - https://nodejs.org/en/ (preferable 8.11.3)
 2. Angular - run this command:
 ```
