@@ -1,6 +1,6 @@
 # JustPostIt
 
-This project is a comments system which logged-in users can write posts and others can comment.
+This project is a posts system which logged-in users can write posts and others can comment.
 
 ## Technologies and main dependencies
 
