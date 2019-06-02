@@ -4,7 +4,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ## Get the code
 
-`git clone https://github.com/elniza/JustPostIt.git justPostIt\n
+`git clone https://github.com/elniza/JustPostIt.git justPostIt  <br />
 cd justPostIt`
 
 ## Development server
